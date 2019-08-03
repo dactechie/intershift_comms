@@ -12,9 +12,10 @@ def get_all_messages(current_user):
     messages = Message.query.all()
     output = [{"title":message.title,
                  "content":message.content,
-                 "user_id": message.user_id}  for message in messages]
+                 "created_user_id": message.created_user_id}  for message in messages]
 
     return jsonify({'messages': output})
+
 
 @mod.route('/messages/<message_id>', methods=['GET'])
 @token_required
@@ -25,9 +26,17 @@ def get_one_message(current_user, message_id):
     if not message:
         return jsonify({'message':'No message found'})
     
+    
+    if current_user in message.readers:
+        #TODO update the last read time
+        pass
+    else:
+        message.readers.append(current_user)        
+        db.session.commit()
+
     result = {"title":message.title,
               "content":message.content,
-              "user_id": message.user_id} 
+              "created_user_id": message.created_user_id} 
 
     return jsonify({'message': result})
 
@@ -40,7 +49,7 @@ def create_message(current_user):
 
     new_message = Message(title=data['title'],
                     content=data['content'],
-                    user_id=current_user.id)
+                    created_user_id=current_user.id)
     db.session.add(new_message)
     db.session.commit()
     return jsonify({'message' : 'New message created!'})
@@ -59,7 +68,7 @@ def edit_message(current_user, message_id):
     data = request.get_json()
     message.title = data['title']
     message.content=data['content']
-    message.user_id=current_user.id  # warning it overrides the original author
+    message.created_user_id=current_user.id  # warning it overrides the original author
 
     db.session.commit()
 

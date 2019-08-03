@@ -1,3 +1,23 @@
 # pip install sqlalchemy
 pip install Flask-SQLAlchemy
 pip install flask-restplus
+
+# after first local commit  :
+~/dev/shift_handover (master)
+$ git remote add origin https://github.com/dactechie/intershift_comms.git
+
+~/dev/shift_handover (master)
+$ git push -u origin master
+
+
+# Aftab.Jalal@dact-55lt MINGW64 ~/dev/shift_handover/server
+# $ source shft/Scripts/activate
+
+sqlite> .mode column
+sqlite> .headers on
+
+
+# changes to DB schema"
+1. cpy all models to setup_db.py with database : 'sqlite:///handover-migrate.db'
+2. python shell  >>> import and db.create()
+3. then python manage.py db migrate, then db upgrade

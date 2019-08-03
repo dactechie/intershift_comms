@@ -14,6 +14,11 @@
             "database": ".\\server\\apis\\handover.db",
             "dialect": "SQLite",
             "name": "handover"
+        },
+        {
+            "database": ".\\server\\handover-migrate.db",
+            "dialect": "SQLite",
+            "name": "migrate"
         }
     ]
 }
