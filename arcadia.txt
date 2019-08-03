@@ -1,0 +1,8 @@
+So, we require:
+-          A forum that all Arcadia staff can access to read and write in
+-          More than one person being able to write in it at once
+-          If it can be altered it needs to be obvious that it has been
+-          Would also be good to have some kind of function that noted it had been read each staff member
+That’s my thoughts for now.
+
+MJ : direct messages ? 

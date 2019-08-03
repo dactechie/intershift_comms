@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 30,
+            "database": "nsp",
+            "dialect": "MSSQL",
+            "name": "NSP",
+            "password": ".rbgq99MqzAt",
+            "port": 1433,
+            "server": "nsp.directionsact.com",
+            "username": "directions"
+        },
+        {
+            "database": ".\\server\\apis\\handover.db",
+            "dialect": "SQLite",
+            "name": "handover"
+        }
+    ]
+}
