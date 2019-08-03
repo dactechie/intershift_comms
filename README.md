@@ -29,10 +29,3 @@ Check out the [post](https://testdriven.io/developing-a-single-page-app-with-fla
     ```
 
     Navigate to [http://localhost:8080](http://localhost:8080)
-
-
-# Aftab.Jalal@dact-55lt MINGW64 ~/dev/shift_handover/server
-# $ source shft/Scripts/activate
-
-sqlite> .mode column
-sqlite> .headers on
