@@ -6,13 +6,15 @@ mod = Blueprint('messages', __name__)
 
 
 @mod.route('/messages', methods=['GET'])
-@token_required
-def get_all_messages(current_user):
+#@token_required
+def get_all_messages():#current_user):
 
     messages = Message.query.all()
-    output = [{"title":message.title,
-                 "content":message.content,
-                 "created_user_id": message.created_user_id}  for message in messages]
+    output = [{ "id": message.id,
+                "title": message.title,
+                "content": message.content,
+                "created_user_id": message.created_user_id} 
+             for message in messages]
 
     return jsonify({'messages': output})
 
@@ -42,14 +44,14 @@ def get_one_message(current_user, message_id):
 
 
 @mod.route('/messages', methods=['POST'])
-@token_required
-def create_message(current_user):
+# @token_required
+def create_message(): #current_user):
 
     data = request.get_json()
 
     new_message = Message(title=data['title'],
                     content=data['content'],
-                    created_user_id=current_user.id)
+                    created_user_id= 1) #current_user.id)
     db.session.add(new_message)
     db.session.commit()
     return jsonify({'message' : 'New message created!'})

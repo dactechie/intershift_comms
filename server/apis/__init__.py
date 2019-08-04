@@ -1,8 +1,12 @@
 from flask import Flask, jsonify #, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 #from flask_restplus import Api
 
 app = Flask(__name__)
+cors = CORS(app)
+#CORS(app, resources=r'/api/*')
+
 
 #app.config.from_pyfile('app_config.py')
 
