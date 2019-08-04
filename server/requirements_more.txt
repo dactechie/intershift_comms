@@ -21,3 +21,9 @@ sqlite> .headers on
 1. cpy all models to setup_db.py with database : 'sqlite:///handover-migrate.db'
 2. python shell  >>> import and db.create()
 3. then python manage.py db migrate, then db upgrade
+
+----------
+Client Interface generation from sqlite DB : 
+npm i @rmp135/sql-ts knex sqlite3  --save-dev
+Aftab.Jalal@dact-55lt MINGW64 ~/dev/shift_handover/client-orig (master)
+$ tsc convert-to-ts.ts &&  node convert-to-ts.js
