@@ -24,6 +24,6 @@ sqlite> .headers on
 
 ----------
 Client Interface generation from sqlite DB : 
-npm i @rmp135/sql-ts knex sqlite3  --save-dev
-Aftab.Jalal@dact-55lt MINGW64 ~/dev/shift_handover/client-orig (master)
-$ tsc convert-to-ts.ts &&  node convert-to-ts.js
+>npm i @rmp135/sql-ts knex sqlite3  --save-dev
+> ~/dev/shift_handover/client
+> tsc convert-to-ts.ts &&  node convert-to-ts.js
