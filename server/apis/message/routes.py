@@ -2,18 +2,20 @@ from flask import Blueprint, jsonify, request, make_response
 from apis.message.models import Message
 from apis.auth.routes import token_required
 from apis import db
+from sqlalchemy import desc
 mod = Blueprint('messages', __name__)
 
 
 @mod.route('/messages', methods=['GET'])
 #@token_required
 def get_all_messages():#current_user):
-
-    messages = Message.query.all()
+    messages = Message.query.order_by(desc(Message.creation_date)).all()
     output = [{ "id": message.id,
                 "title": message.title,
                 "content": message.content,
-                "created_user_id": message.created_user_id} 
+                #"created_user_id": message.created_user_id,
+                "read_by": [user.username for user in message.readers.all()]
+                } 
              for message in messages]
 
     return jsonify({'messages': output})
@@ -27,8 +29,7 @@ def get_one_message(current_user, message_id):
 
     if not message:
         return jsonify({'message':'No message found'})
-    
-    
+        
     if current_user in message.readers:
         #TODO update the last read time
         pass
@@ -44,14 +45,17 @@ def get_one_message(current_user, message_id):
 
 
 @mod.route('/messages', methods=['POST'])
-# @token_required
-def create_message(): #current_user):
+@token_required
+def create_message(current_user):
 
     data = request.get_json()
 
     new_message = Message(title=data['title'],
                     content=data['content'],
-                    created_user_id= 1) #current_user.id)
+                    created_user_id=current_user.id)
+    
+    new_message.readers.append(current_user)
+
     db.session.add(new_message)
     db.session.commit()
     return jsonify({'message' : 'New message created!'})

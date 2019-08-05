@@ -1,6 +1,11 @@
 from apis import db#, messages_read_users
 from sqlalchemy.sql import func
 
+messages_read_users = db.Table('read_messages',
+                         db.Column('user_id', db.Integer, db.ForeignKey('Users.id') ),
+                         db.Column('message_id', db.Integer, db.ForeignKey('Messages.id') ),
+                         db.Column('read_date', db.DateTime(timezone=True), server_default=func.now())
+                        )
 
 class Message(db.Model):
 
