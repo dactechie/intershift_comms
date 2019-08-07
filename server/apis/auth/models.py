@@ -1,4 +1,4 @@
-from apis import db #, messages_read_users
+from extensions import db #, messages_read_users
 from sqlalchemy.sql import func
 from apis.message.models import messages_read_users
 

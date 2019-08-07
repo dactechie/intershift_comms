@@ -1,31 +1,10 @@
-from functools import wraps
-import datetime
-from flask import Blueprint, jsonify, request, make_response
-from werkzeug.security import check_password_hash
-import jwt
-from apis.auth.models import User
-from apis import app
 
+
+from flask import Blueprint, jsonify, request
+from apis.admin.service import UserService
+from .service import AuthService, token_required
 
 mod = Blueprint('auth', __name__)
-
-
-def token_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = None
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-        if not token:
-            return jsonify({'message':'Token is missing'}), 401
-        try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
-            current_user = User.query.filter_by(public_id=data['public_id']).first()
-        except:
-            return jsonify({'message':'Token is invalid'}), 401
-        return f(current_user, *args, **kwargs)
-    return decorated
-
 
 def _unableToLogin():
     return make_response('Could not verify!',
@@ -38,15 +17,19 @@ def login():
     if not auth or not auth.username or not auth.password:
         return _unableToLogin()
 
-    user = User.query.filter_by(username=auth.username).first()
+    user = UserService.get_by_username(auth.username)
     if not user:
         return _unableToLogin()
+    
+    decoded_token = AuthService.get_token_ifok(user, auth.password)
+    if decoded_token:
+        return jsonify({'token': decoded_token})
 
-    if check_password_hash(user.password, auth.password):
-        token  = jwt.encode({'public_id': user.public_id, 
-                             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=120),                             
-                            }, app.config['SECRET_KEY'])
-        return jsonify({'token': token.decode('UTF-8')})
+    # if check_password_hash(user.password, auth.password):
+    #     token  = jwt.encode({'public_id': user.public_id, 
+    #                          'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=9620),
+    #                         }, app.config['SECRET_KEY'])
+    #     return jsonify({'token': token.decode('UTF-8')})
 
     return _unableToLogin()
 

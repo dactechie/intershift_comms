@@ -1,4 +1,4 @@
-from apis import db#, messages_read_users
+from extensions import db#, messages_read_users
 from sqlalchemy.sql import func
 
 messages_read_users = db.Table('read_messages',

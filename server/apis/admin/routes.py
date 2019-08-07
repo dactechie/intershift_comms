@@ -1,21 +1,18 @@
-from flask import Blueprint, jsonify, request, make_response
-#import jwt
-from apis.auth.models import User
-from apis.auth.routes import token_required
-import uuid
-from werkzeug.security import generate_password_hash
-from apis import app, db
+from flask import Blueprint, jsonify, request
+from ..auth.service import token_required
+from .service import UserService
+
 
 mod = Blueprint('admin', __name__)
+
 
 @mod.route('/admin', methods=['GET'])
 @token_required
 def get_all_users(current_user):
-
     if not current_user.admin:
         return jsonify({'message':'Cannot perform that function'})
 
-    users = User.query.all()
+    users = UserService.get_all()  #users = User.query.all()
     output = [{"username":u.username,
                  "public_id":u.public_id,
                  "password":u.password,
@@ -23,15 +20,14 @@ def get_all_users(current_user):
 
     return jsonify({'users': output})
 
+
 @mod.route('/admin/<public_id>', methods=['GET'])
 @token_required
 def get_one_user(current_user, public_id):
-    
     if not current_user.admin:
         return jsonify({'message':'Cannot perform that function'})
 
-    user = User.query.filter_by(public_id=public_id).first()
-
+    user = UserService.get_by_id(public_id=public_id) 
     if not user:
         return jsonify({'message':'No user found'})
     
@@ -43,21 +39,15 @@ def get_one_user(current_user, public_id):
 
 
 @mod.route('/admin', methods=['POST'])
-#@token_required
-def create_user():
-    # if not current_user.admin:
-    #     return jsonify({'message':'Cannot perform that function'})
+@token_required
+def create_user(current_user):
+    if not current_user.admin:
+        return jsonify({'message':'Cannot perform that function'})
 
     data = request.get_json()
-    hashed_password = generate_password_hash(data['password'], method='sha256')
+    user = UserService.create(data)
 
-    new_user = User(public_id=str(uuid.uuid4()),
-                    username=data['username'],
-                    password=hashed_password,
-                    admin=False)
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({'message' : 'New user creatd!'})
+    return jsonify({'message' : f'New user creatd! public id: {user.public_id}'})
 
 
 @mod.route('/admin/<public_id>', methods=['PUT'])
@@ -66,11 +56,11 @@ def promote_user(current_user, public_id):
     if not current_user.admin:
         return jsonify({'message':'Cannot perform that function'})
 
-    user = User.query.filter_by(public_id=public_id).first()
+    user = UserService.get_by_id(public_id=public_id)
     if not user:
         return jsonify({'message':'No user found'})
-    user.admin = True
-    db.session.commit()
+    
+    UserService.update(user)
 
     return jsonify({'message': 'the user has been promoted'})
 
@@ -81,10 +71,11 @@ def delete_user(current_user, public_id):
     if not current_user.admin:
         return jsonify({'message':'Cannot perform that function'})
     
-    user = User.query.filter_by(public_id=public_id).first()
+    user = UserService.get_by_id(public_id=public_id)
     if not user:
         return jsonify({'message':'No user found'})
-    db.session.delete(user)
-    db.session.commit()
+
+    UserService.delete(user)
+    
     return jsonify({'message': 'the user has been deleted.'})
 
