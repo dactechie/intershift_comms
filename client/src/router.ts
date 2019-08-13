@@ -1,15 +1,30 @@
 import Vue from 'vue';
-import Router from 'vue-router';
+import VueRouter from 'vue-router';
 import Home from './views/Home.vue';
+import Login from './views/Login.vue';
+import Logout from './views/Logout.vue';
 
-Vue.use(Router);
+Vue.use(VueRouter);
 
-export default new Router({
+export default new VueRouter({
   routes: [
     {
       path: '/',
       name: 'home',
       component: Home,
+      meta: {auth: true},
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
+      meta: {auth: true,  redirect: {name: 'default'}},
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login,
+      meta: {auth: false,  redirect: {name: 'default'}},
     },
     {
       path: '/about',

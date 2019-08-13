@@ -7,16 +7,16 @@
             <hr><br><br>
             <!-- <alert :message="message" v-if="showMessage"></alert> -->
             <!-- <button type="button" class="btn btn-success btn-sm" v-b-modal.Message-modal>Add Message</button> -->
-            <button type="button" class="btn btn-success btn-sm" @click="toggleAddMessage">Add Message</button>
+            <button type="button" class="btn btn-success btn-sm" @click.prevent="toggleAddMessage">Add Message</button>
             <br><br>
             <AddMessage @savedMessage="messageSaved" v-if="addNew"/>
             <br><br>
             <table class="table table-hover">
                 <thead>
                     <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Content</th>
+                    <th scope="col">Title</th>                    
                     <th scope="col">Created by</th>
+                    <th scope="col">Create date</th>
                     <th scope="col">Read by</th>
                     <!-- <th scope="col">Read?</th> -->
                     <th></th>
@@ -24,9 +24,9 @@
                 </thead>
                 <tbody>
                 <tr v-for="article in articles" v-bind:key="article.id">        
-                    <td>{{article.title}}</td>
-                    <td>{{article.content}}</td>
+                    <td>{{article.title}}</td>                    
                     <td>{{article.created_user_id}}</td>
+                    <td>{{article.creation_date}}</td>
                     <td>{{article.read_by}}</td>
                     <td>
                         <div class="btn-group" role="group">
@@ -93,10 +93,13 @@ export default class MessagesComp extends Vue {
         this.addNew = !this.addNew;
     }
     private fetchMessages() {
-        axios.get('http://127.0.0.1:5000/messages').then((response) => {
+        Vue.axios.defaults.headers.common['Authorization'] =
+                                'Bearer ' + localStorage.getItem('token');
+        Vue.axios.get('http://127.0.0.1:5000/messages').then((response) => {
           this.articles = response.data.messages;
         }, (error) => {
-            alert(error);
+            console.log('Error unable to fetch messages.', error);
+            this.$router.push('/login');
         });
     }
 

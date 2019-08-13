@@ -5,7 +5,7 @@
             title="Add a new Message"
             hide-footer>
             -->
-            <b-form @submit="onSubmit" @reset="onReset" class="w-100">
+            <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" class="w-100">
             <b-form-group id="form-title-group"
                             label="Title:"
                             label-for="form-title-input">
@@ -67,11 +67,10 @@ export default class AddMessage extends Vue {
 
     private addMessage(payload: NewMessage) {
       const path = 'http://localhost:5000/messages';
-      axios.post(path, payload)
+      Vue.axios.post(path, payload)
         .then(() => {
           // this.fetchMessages();
             this.$emit('savedMessage');
-            
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -90,7 +89,6 @@ export default class AddMessage extends Vue {
     //   this.editForm.read = [];
     }
     private onSubmit(evt: any) {
-      evt.preventDefault();
      // this.$refs.addMessageModal.hide();
       // let read = false;
       // if (this.addMessageForm.read[0]) read = true;
@@ -102,7 +100,6 @@ export default class AddMessage extends Vue {
       this.initForm();
     }
     private onReset(evt: any) {
-      evt.preventDefault();
       // this.$refs.addMessageModal.hide();
       this.initForm();
     }
