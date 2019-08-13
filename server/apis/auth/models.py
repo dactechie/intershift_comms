@@ -17,7 +17,7 @@ class User(db.Model):
     # created_messages = db.relationship('Message', backref='user',
     #                                    lazy="dynamic", cascade="all,delete")
 
-    read_messages = db.relationship('Message', secondary=messages_read_users,
+    read_messages = db.relationship('Messages', secondary=messages_read_users,
                                     backref=db.backref('readers', lazy='dynamic')
                                    )
 

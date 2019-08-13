@@ -11,8 +11,9 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
+        bearer_token = request.headers.environ.get('HTTP_AUTHORIZATION')
+        if bearer_token:
+            token = bearer_token.split(' ')[1]
         if not token:
             return jsonify({'message':'Token is missing'}), 401
         try:
@@ -25,13 +26,14 @@ def token_required(f):
 
 
 class AuthService():
-
+        
     @staticmethod
     def get_token_ifok(user:User, auth_password:str):
 
-        if check_password_hash(user.password, auth_password):
+        if check_password_hash(user.password, auth_password):            
             token  = jwt.encode({'public_id': user.public_id, 
-                                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=9620),
+                                'exp': datetime.datetime.utcnow() +
+                                       datetime.timedelta(seconds=app.config['TOKEN_EXPIRATION_SECONDS']),
                                 }, app.config['SECRET_KEY'])
 
             return token.decode('UTF-8')

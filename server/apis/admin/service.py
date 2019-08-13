@@ -9,10 +9,14 @@ from apis.auth.models import User
 class UserService():
 
     @staticmethod
-    def get_by_id(public_id: int) -> User:
+    def get_by_id(user_id: int) -> User:
+        user = User.query.get(user_id)
+        return user
+    
+    @staticmethod
+    def get_by_public_id(public_id: int) -> User:
         user = User.query.filter_by(public_id=public_id).first()
         return user
-        #User.query.get(user_id)
 
     @staticmethod
     def get_by_username(username: str)-> User:

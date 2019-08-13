@@ -1,8 +1,9 @@
 
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, make_response
 from apis.admin.service import UserService
 from .service import AuthService, token_required
+import json
 
 mod = Blueprint('auth', __name__)
 
@@ -11,25 +12,34 @@ def _unableToLogin():
                          401, 
                          {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
-@mod.route('/')
+
+# @mod.route('/login', methods=['OPTIONS'])
+# def login_options():
+#     print(request)
+#     return 'ok'
+
+
+@mod.route('/login', methods=['POST'])
 def login():
-    auth  = request.authorization
-    if not auth or not auth.username or not auth.password:
+    auth = None
+    username = None
+    if request.data:
+        auth = json.loads(request.data.decode('utf-8'))
+        username = auth['email']
+    else:
+        auth = request.authorization    # for Postman
+        username = auth['username']
+   
+    if not auth or not username or not auth['password']:
         return _unableToLogin()
 
-    user = UserService.get_by_username(auth.username)
+    user = UserService.get_by_username(username)
     if not user:
         return _unableToLogin()
     
-    decoded_token = AuthService.get_token_ifok(user, auth.password)
+    decoded_token = AuthService.get_token_ifok(user, auth['password'])
     if decoded_token:
         return jsonify({'token': decoded_token})
-
-    # if check_password_hash(user.password, auth.password):
-    #     token  = jwt.encode({'public_id': user.public_id, 
-    #                          'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=9620),
-    #                         }, app.config['SECRET_KEY'])
-    #     return jsonify({'token': token.decode('UTF-8')})
 
     return _unableToLogin()
 

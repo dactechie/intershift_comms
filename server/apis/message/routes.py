@@ -1,7 +1,9 @@
 from flask import Blueprint, jsonify, request, make_response
 from apis.auth.service import token_required
+from apis.admin.service import UserService
 from extensions import db
 from .service import MessageService
+from .models import Messages
 
 mod = Blueprint('messages', __name__)
 
@@ -10,13 +12,15 @@ mod = Blueprint('messages', __name__)
 @token_required
 def get_all_messages(current_user):
     output = MessageService.get_all()
+    
     return jsonify({'messages': output})
 
 
 @mod.route('/messages/<message_id>', methods=['GET'])
 @token_required
 def get_one_message(current_user, message_id):
-    message = MessageService.get_by_id(message_id=message_id)
+    
+    message:Messages = MessageService.get_by_id(message_id=message_id)
     if not message:
         return jsonify({'message':'No message found'})
         
@@ -26,9 +30,11 @@ def get_one_message(current_user, message_id):
     else:
         MessageService.set_reader(message, current_user)
 
+    created_user = UserService.get_by_id(message.created_user_id)
+
     result = {"title":message.title,
-              "content":message.content,
-              "created_user_id": message.created_user_id}
+              "content":message.message_contents.content,
+              "created_user": created_user.username}
 
     return jsonify({'message': result})
 
@@ -37,11 +43,11 @@ def get_one_message(current_user, message_id):
 @token_required
 def create_message(current_user):
     data = request.get_json()
-    new_message = MessageService.create(
+    new_message_id = MessageService.create(
                     {'title': data['title'],'content': data['content']},
                     created_by_user=current_user)
     
-    return jsonify({'message' : 'New message created!'})
+    return jsonify({'message' : f'New message created! id:{new_message_id}'}), 201
 
 
 @mod.route('/messages/<message_id>', methods=['PUT'])
@@ -76,7 +82,7 @@ def delete_message(current_user, message_id):
 
     MessageService.delete(message)
 
-    return jsonify({'message': 'the message has been deleted.'})
+    return jsonify({'message': 'the message has been deleted.'}), 204
 
 
 

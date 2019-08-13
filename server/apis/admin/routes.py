@@ -27,7 +27,7 @@ def get_one_user(current_user, public_id):
     if not current_user.admin:
         return jsonify({'message':'Cannot perform that function'})
 
-    user = UserService.get_by_id(public_id=public_id) 
+    user = UserService.get_by_public_id(public_id=public_id) 
     if not user:
         return jsonify({'message':'No user found'})
     
@@ -56,7 +56,7 @@ def promote_user(current_user, public_id):
     if not current_user.admin:
         return jsonify({'message':'Cannot perform that function'})
 
-    user = UserService.get_by_id(public_id=public_id)
+    user = UserService.get_by_public_id(public_id=public_id)
     if not user:
         return jsonify({'message':'No user found'})
     
@@ -71,7 +71,7 @@ def delete_user(current_user, public_id):
     if not current_user.admin:
         return jsonify({'message':'Cannot perform that function'})
     
-    user = UserService.get_by_id(public_id=public_id)
+    user = UserService.get_by_public_id(public_id=public_id)
     if not user:
         return jsonify({'message':'No user found'})
 
