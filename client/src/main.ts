@@ -1,13 +1,25 @@
 import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-import store from './store';
+import Vuex from 'vuex';
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import VueAuthenticate from 'vue-authenticate';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+
+import router from './router';
+import App from './App.vue';
+import { buildStore } from './store/index';
+
+Vue.use(Vuex);
+const builtStore = buildStore();
+
+builtStore.replaceState({
+    auth: { isLoggedIn: false, userID: '' },
+    message: {  messages: [
+          {title : 'title',  content : 'content',   created_date : new Date()},
+        ]},
+});
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
@@ -26,7 +38,7 @@ Vue.use(VueAuthenticate, {
 
 //   bindRequestInterceptor: function () {
 //     (this as any).$http.interceptors.request.use((config: any) => {
-//       console.log("request interceptor")
+//       console.log('request interceptor')
 //       if ((this as any).isAuthenticated()) {
 //         config.headers['Authorization'] = [
 //           (this as any).options.tokenType, (this as any).getToken()
@@ -48,7 +60,7 @@ Vue.use(VueAuthenticate, {
 
 const vm  = new Vue({
   router,
-  store,
+  store: builtStore,
   render: (h) => h(App),
 }).$mount('#app');
 

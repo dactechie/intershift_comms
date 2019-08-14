@@ -23,10 +23,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr v-for="article in articles" v-bind:key="article.id">        
+                <tr v-for="article in messages" v-bind:key="article.id">        
                     <td>{{article.title}}</td>                    
-                    <td>{{article.created_user_id}}</td>
-                    <td>{{article.creation_date}}</td>
+                    <td>{{article.created_username}}</td>
+                    <td>{{article.created_date}}</td>
                     <td>{{article.read_by}}</td>
                     <td>
                         <div class="btn-group" role="group">
@@ -58,13 +58,13 @@
 </template>
 
 <script lang="ts">
-// import { Component, Prop, Vue } from 'vue-property-decorator';
+// import { Component, Prop } from 'vue-property-decorator';
 
 import Vue from 'vue';
-
 import Component from 'vue-class-component';
-import AddMessage from '@/components/AddMessage.vue';
 import axios from 'axios';
+
+import AddMessage from '@/components/AddMessage.vue';
 
 
 @Component({
@@ -76,7 +76,7 @@ import axios from 'axios';
 
 export default class MessagesComp extends Vue {
 
-    private articles: any = null;
+    private messages: any = null;
     private message: string = '';
     private showMessage: boolean =  false;
     private addNew: boolean = false;
@@ -96,9 +96,9 @@ export default class MessagesComp extends Vue {
         Vue.axios.defaults.headers.common['Authorization'] =
                                 'Bearer ' + localStorage.getItem('token');
         Vue.axios.get('http://127.0.0.1:5000/messages').then((response) => {
-          this.articles = response.data.messages;
+          this.$store.state.messages = response.data.messages;
         }, (error) => {
-            console.log('Error unable to fetch messages.', error);
+            // console.log('Error unable to fetch messages.', error);
             this.$router.push('/login');
         });
     }

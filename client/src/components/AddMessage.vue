@@ -49,7 +49,9 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import axios from 'axios';
-import { Prop } from 'vue-property-decorator';
+import MessageManager from '../store/message/message';
+import { IMessage } from '../store/message/state';
+// import { Prop } from 'vue-property-decorator';
 
 interface NewMessage {
     title: string;
@@ -66,19 +68,13 @@ export default class AddMessage extends Vue {
     };
 
     private addMessage(payload: NewMessage) {
-      const path = 'http://localhost:5000/messages';
-      Vue.axios.post(path, payload)
-        .then(() => {
-          // this.fetchMessages();
-            this.$emit('savedMessage');
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          alert('error ' + error);
-          // console.log(error);
-          // this.fetchMessages();
-        });
+      const m: IMessage = {title : 'title',  content : 'content',   created_date : new Date()};
+      m.title = payload.title;
+      m.content = payload.content;
+      m.created_date = new Date();
+      MessageManager.dispatchDelayedAppend(m);
     }
+
     private initForm() {
       this.addMessageForm.title = '';
       this.addMessageForm.content = '';
