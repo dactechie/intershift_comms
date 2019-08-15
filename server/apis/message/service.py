@@ -15,10 +15,10 @@ class MessageService():
 
     @staticmethod
     def get_all() -> List[object]:
-        messages = Messages.query.order_by(desc(Messages.creation_date)).all()
+        messages = Messages.query.order_by(desc(Messages.created_date)).all()
         return [{ "id": message.id,
                 "title": message.title,
-                "creation_date": message.creation_date,
+                "created_date": message.created_date,
                 "created_user_id": message.created_user_id,
                 "read_by": [user.username for user in message.readers.all()]
                 } 
@@ -47,16 +47,16 @@ class MessageService():
 
 
     @staticmethod
-    def create(changes: dict, created_by_user: any) -> int:
+    def create(mesg_dict: dict, created_by_user: any) -> int:
 
-        new_message = Messages(title=changes['title'],                                
+        new_message = Messages(title=mesg_dict['title'],                                
                                 created_user_id=created_by_user.id)
         new_message.readers.append(created_by_user)
 
         db.session.add(new_message)
         db.session.commit()
 
-        mc = MessageContents(changes['content'], message_id=new_message.id)
+        mc = MessageContents(mesg_dict['content'], message_id=new_message.id)
         db.session.add(mc)
         db.session.commit()
         

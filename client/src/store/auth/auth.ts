@@ -1,8 +1,8 @@
 // import Vuex from 'vuex'
 // import { ModuleBuilder } from 'vuex-typex'
+// import { Module } from 'vuex'
 import { AuthState } from './state';
 import { RootState } from '../index';
-// import { Module } from 'vuex'
 import { getStoreBuilder } from 'vuex-typex';
 
 const initialState: AuthState = {

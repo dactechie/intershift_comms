@@ -56,7 +56,7 @@ class Messages(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(100))
     created_user_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
-    creation_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
     update_date = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     message_contents = db.relationship('MessageContents', back_populates='meta', uselist=False,
                                         cascade="all,delete")
@@ -66,7 +66,7 @@ class Messages(db.Model):
 
 
 db.create_all()
-u = Users('uu','pp','sdfs',False)
+u = Users('aftab','cool','sdfs',True)
 m = Messages('title',1)
 db.session.add(u)
 db.session.add(m)

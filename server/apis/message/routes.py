@@ -34,7 +34,9 @@ def get_one_message(current_user, message_id):
 
     result = {"title":message.title,
               "content":message.message_contents.content,
-              "created_user": created_user.username}
+              "created_username": created_user.username,
+              "id": message.id,
+              "created_date": message.created_date}
 
     return jsonify({'message': result})
 

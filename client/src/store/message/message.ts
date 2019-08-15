@@ -1,17 +1,49 @@
 import { getStoreBuilder } from 'vuex-typex';
 import { MessagesState, IMessage } from './state';
 import { RootState } from '../index';
-import addMessageAction from './actions/addAfterDelay';
+import { addMessageAction, getMessagesAction, getMesgById } from './actions';
+import { addMessageMut, clearMessagesMut, fetchedMessagesMut, fullFetchedMessageMut } from './mutations';
+import { getBasicMesgById } from './getters';
 
 const initialState: MessagesState = {
-    messages: [],
+    messages: [],    
 };
 
-const mb = getStoreBuilder<RootState>().module<MessagesState>('Message', initialState);
+const mb = getStoreBuilder<RootState>().module<MessagesState>('message', initialState);
 
-const addMessageMut = (state: MessagesState, payload: { Message: IMessage }) => state.messages.push(payload.Message);
-const removeFirstMessageMut = (state: MessagesState) => state.messages.shift();
-const clearMessagesMut = (state: MessagesState) => state.messages = [];
+const _getBMessageById= mb.read((state) => getBasicMesgById, "message"); //(state: MessagesState, mesg_id: number)
+// const getMessages= mb.read((state) => getMesgs, "message"); //(state: MessagesState, mesg_id: number)
+
+const stateReader = mb.state();
+
+const MessageManager = {
+    // getters + methods
+    get state() { return stateReader(); },
+    //getById(mesg_id: number) { return getMessageById()(stateReader(), mesg_id); },
+    _getBMesgById(mesg_id: number) { return _getBMessageById()(stateReader(), mesg_id); },
+
+    // mutations
+    commitAddMessage: mb.commit(addMessageMut),
+    commitClearMessages: mb.commit(clearMessagesMut),
+    commitFetchedMessages: mb.commit(fetchedMessagesMut),
+    commitFullFetchedMessage : mb.commit(fullFetchedMessageMut),
+
+    // actions
+    dispatchDelayedAppend: mb.dispatch(addMessageAction),
+    dispatchGetMessages : mb.dispatch(getMessagesAction),
+    dispatchGetMessage : mb.dispatch(getMesgById),
+};
+
+// Message.commitAddMessage({ Message: { created_date: new Date(1980, 2, 3), title: "Louise" } })
+
+export default MessageManager;
+export { mb as MessageModuleBuilder };
+
+
+
+// const getMessageById= mb.read((state) => (state: MessagesState, mesg_id: number) => {
+//   getMesgById(state, mesg_id);
+// }, "message");
 
 // const oldestNameGetter = mb.read((state): string | undefined =>
 // {
@@ -30,38 +62,6 @@ const clearMessagesMut = (state: MessagesState) => state.messages = [];
 //     return
 // }, "dob")
 
-const stateReader = mb.state();
 
-const MessageManager = {
-    // getters + methods
-    get state() { return stateReader(); },
     // get oldestName() { return oldestNameGetter() },
     // dateOfBirthFor(name: string) { return dateOfBirthForMethod()(name) },
-
-    // mutations
-    commitAddMessage: mb.commit(addMessageMut),
-    commitRemoveFirstMessage: mb.commit(removeFirstMessageMut),
-    commitClearMessages: mb.commit(clearMessagesMut),
-
-    // actions
-  //  dispatchRemoveFirstAfterDelay: mb.dispatch(removeFirstAfterDelay),
-
-    dispatchDelayedAppend: mb.dispatch(addMessageAction),
-};
-
-// Message.commitAddMessage({ Message: { created_date: new Date(1980, 2, 3), title: "Louise" } })
-// Message.commitRemoveFirstMessage()
-// Message.dateOfBirthFor("Louise")
-// Message.dispatchRemoveFirstAfter(1000)
-// let m:IMessage = {
-//     id:1,
-//     title: 'cool',
-//     created_username: 'aftab',
-//     created_date: new Date(),
-//     read_by: 'aftab',
-// };
-
-// Message.dispatchDelayedAppend(m);
-
-export default MessageManager;
-export { mb as MessageModuleBuilder };

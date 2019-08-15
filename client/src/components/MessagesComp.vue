@@ -11,6 +11,7 @@
             <br><br>
             <AddMessage @savedMessage="messageSaved" v-if="addNew"/>
             <br><br>
+            <ViewMessage :message=message  :showMessage=showMessage v-if="showMessage"/>
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -32,17 +33,17 @@
                         <div class="btn-group" role="group">
                         <button
                                 type="button"
-                                class="btn btn-warning btn-sm"
+                                class="btn btn-sm"
                                 v-b-modal.Message-update-modal
-                                @click="editMessage(Message)">
-                            Edit
+                                @click="openMessage(article.id)">
+                            Open
                         </button>
-                        <button
+                        <!-- <button
                                 type="button"
                                 class="btn btn-danger btn-sm"
                                 @click="onDeleteMessage(Message)">
                             View
-                        </button>
+                        </button> -->
                         </div>
                     </td>
                 </tr>
@@ -65,41 +66,55 @@ import Component from 'vue-class-component';
 import axios from 'axios';
 
 import AddMessage from '@/components/AddMessage.vue';
-
+import ViewMessage from '@/components/ViewMessage.vue';
+import MessageManager from '../store/message/message';
+import { IMessage } from '../store/message/state';
 
 @Component({
     name: 'MessagesComp',
     components: {
         AddMessage,
+        ViewMessage,
     },
 })
 
 export default class MessagesComp extends Vue {
 
     private messages: any = null;
-    private message: string = '';
+    private message: any;
     private showMessage: boolean =  false;
     private addNew: boolean = false;
 
     public mounted() {
       this.fetchMessages();
     }
+    private openMessage(id: number) {
+        MessageManager._getBMesgById(id)
+        .then(mesg => {
+            if (! mesg || !mesg.content) {
+                MessageManager.dispatchGetMessage(id).then( res=>{
+                    MessageManager._getBMesgById(id).then(r => {
+                        this.message = r;                    
+                        this.showMessage = true;
+                    });                    
+                });
+            } else {
+                this.message = mesg;
+            }
+        });        
+    }
     private messageSaved() {
         alert('cool');
-        this.message = 'Succeuful';
+        //this.message = 'Succeuful';
         this.showMessage = true;
     }
     private toggleAddMessage() {
         this.addNew = !this.addNew;
     }
     private fetchMessages() {
-        Vue.axios.defaults.headers.common['Authorization'] =
-                                'Bearer ' + localStorage.getItem('token');
-        Vue.axios.get('http://127.0.0.1:5000/messages').then((response) => {
-          this.$store.state.messages = response.data.messages;
-        }, (error) => {
-            // console.log('Error unable to fetch messages.', error);
-            this.$router.push('/login');
+        MessageManager.dispatchGetMessages().then(response => {
+            console.log(response);
+            this.messages = MessageManager.state.messages;
         });
     }
 

@@ -68,10 +68,11 @@ export default class AddMessage extends Vue {
     };
 
     private addMessage(payload: NewMessage) {
-      const m: IMessage = {title : 'title',  content : 'content',   created_date : new Date()};
-      m.title = payload.title;
-      m.content = payload.content;
-      m.created_date = new Date();
+      const m: IMessage = {
+        title :  payload.title,
+        content : payload.content,
+        created_date : new Date(),
+      };
       MessageManager.dispatchDelayedAppend(m);
     }
 

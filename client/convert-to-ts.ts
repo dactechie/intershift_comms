@@ -15,3 +15,4 @@ async function runme() {
 }
 
 runme();
+//  tsc convert-to-ts.ts && node convert-to-ts.js

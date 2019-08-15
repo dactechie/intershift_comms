@@ -14,19 +14,22 @@ import { buildStore } from './store/index';
 Vue.use(Vuex);
 const builtStore = buildStore();
 
-builtStore.replaceState({
-    auth: { isLoggedIn: false, userID: '' },
-    message: {  messages: [
-          {title : 'title',  content : 'content',   created_date : new Date()},
-        ]},
-});
-
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 
 (Vue as any).router = router;
 
+// const config = {
+//   timeout: 1500,
+//   baseURL: 'http://localhost:5000',
+//   ...axios.defaults,
+// };
+
+// const axiosInstance = axios.create(config);
+// Vue.use(VueAxios, axiosInstance);
+
 Vue.use(VueAxios, axios);
+Vue.axios.defaults.baseURL = 'http://localhost:5000';
 
 Vue.use(VueAuthenticate, {
   baseUrl: 'http://localhost:5000', // Your API domain

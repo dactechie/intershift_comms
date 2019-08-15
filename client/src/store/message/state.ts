@@ -5,6 +5,7 @@ export interface IMessage {
     created_username?: string;
     created_date: Date;
     read_by?: string[];
+    update_date?: Date;
 }
 
 export interface MessagesState {
