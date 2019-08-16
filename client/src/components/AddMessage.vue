@@ -11,7 +11,7 @@
                             label-for="form-title-input">
                 <b-form-input id="form-title-input"
                                 type="text"
-                                v-model="addMessageForm.title"
+                                v-model="title"
                                 required
                                 placeholder="Enter title">
                 </b-form-input>
@@ -21,7 +21,7 @@
                             label-for="form-content-input">
                     <textarea id="form-content-input"
                                 rows="8"
-                                v-model="addMessageForm.content"
+                                v-model="content"
                                 required
                                 placeholder="Enter your message (at least 10 characters)"
                                 v-on:keydown.enter="$event.stopPropagation()">
@@ -53,47 +53,31 @@ import MessageManager from '../store/message/message';
 import { IMessage } from '../store/message/state';
 // import { Prop } from 'vue-property-decorator';
 
-interface NewMessage {
-    title: string;
-    content: string;
-}
-
 @Component ({
   name: 'AddMessage',
 })
 export default class AddMessage extends Vue {
-    private addMessageForm: NewMessage = {
-        title: '',
-        content: '',
+    private title: string = '';
+    private content: string = '';
+    private message: IMessage = {
+       title: '',
+       content: '',
     };
-
-    private addMessage(payload: NewMessage) {
-      const m: IMessage = {
-        title :  payload.title,
-        content : payload.content,
-        created_date : new Date(),
-      };
-      MessageManager.dispatchDelayedAppend(m);
-    }
-
     private initForm() {
-      this.addMessageForm.title = '';
-      this.addMessageForm.content = '';
-      // this.addMessageForm.read = [];
-    //   this.editForm.id = '';
-    //   this.editForm.title = '';
-    //   this.editForm.author = '';
-    //   this.editForm.read = [];
+      this.title = '';
+      this.content = '';
     }
+
     private onSubmit(evt: any) {
-     // this.$refs.addMessageModal.hide();
-      // let read = false;
-      // if (this.addMessageForm.read[0]) read = true;
-      const payload: NewMessage = {
-        title: this.addMessageForm.title,
-        content: this.addMessageForm.content,
-      };
-      this.addMessage(payload);
+      // this.$refs.addMessageModal.hide();
+      this.message.title = this.title;
+      this.message.content = this.content;
+      MessageManager.dispatchDelayedAppend(this.message).then((res) => {
+        this.$emit('added_message');
+      }).catch((error) => {
+         alert(error);
+      });
+
       this.initForm();
     }
     private onReset(evt: any) {

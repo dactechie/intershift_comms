@@ -12,14 +12,17 @@ class MessageService():
         message.readers.append(user)
         db.session.commit()
 
+    # TODO : Add : get-all between dates
 
     @staticmethod
     def get_all() -> List[object]:
         messages = Messages.query.order_by(desc(Messages.created_date)).all()
+        users = User.query.all()
+
         return [{ "id": message.id,
                 "title": message.title,
                 "created_date": message.created_date,
-                "created_user_id": message.created_user_id,
+                "created_username": [user.username for user in users if user.id == message.created_user_id],
                 "read_by": [user.username for user in message.readers.all()]
                 } 
                 for message in messages]
@@ -47,7 +50,7 @@ class MessageService():
 
 
     @staticmethod
-    def create(mesg_dict: dict, created_by_user: any) -> int:
+    def create(mesg_dict: dict, created_by_user: any) -> Messages:
 
         new_message = Messages(title=mesg_dict['title'],                                
                                 created_user_id=created_by_user.id)
@@ -60,4 +63,4 @@ class MessageService():
         db.session.add(mc)
         db.session.commit()
         
-        return new_message.id
+        return new_message

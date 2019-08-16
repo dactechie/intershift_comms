@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-//import Component from 'vue-class-component';
+// import Component from 'vue-class-component';
 import axios from 'axios';
 import MessageManager from '../store/message/message';
 import { IMessage } from '../store/message/state';
@@ -49,13 +49,12 @@ import { Component, Prop } from 'vue-property-decorator';
 })
 export default class ViewMessage extends Vue {
 
-    @Prop() message!: IMessage;
-    @Prop(Boolean) showMessage!: boolean;
+    @Prop() private message!: IMessage;
+    @Prop(Boolean) private showMessage!: boolean;
 
     public beforeDestroy() {
-        this.showMessage = false;
+        // this.showMessage = false;
     }
-
 }
 </script>
 <style scoped>

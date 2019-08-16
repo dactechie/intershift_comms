@@ -3,7 +3,7 @@ export interface IMessage {
     title: string;
     content?: string;
     created_username?: string;
-    created_date: Date;
+    created_date?: Date;
     read_by?: string[];
     update_date?: Date;
 }

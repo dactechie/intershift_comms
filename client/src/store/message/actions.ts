@@ -4,48 +4,48 @@ import { IMessage, MessagesState } from './state';
 import { RootState } from '../index';
 import Vue from 'vue';
 
-export async function 
+export async function
     addMessageAction(context: BareActionContext<MessagesState, RootState>, message: IMessage) {
 
     const path = '/messages';
     const res = await Vue.axios.post(path, message);
     if (await res.data != null) {
-        MessageManager.commitAddMessage({ Message: message});
+        const addedMessage: IMessage =  res.data.message as IMessage;
+        MessageManager.commitAddMessage({ Message: addedMessage});
     }
     return;
 }
 
-export async function 
+export async function
     getMessagesAction(context: BareActionContext<MessagesState, RootState>) {
 
     const path = '/messages';
-     Vue.axios.defaults.headers.common['Authorization'] =
+    Vue.axios.defaults.headers.common['Authorization'] =
                                 'Bearer ' + localStorage.getItem('token');
     const res = await Vue.axios.get(path);
     if (await res.data != null) {
-        let messages:IMessage[] = <IMessage[]> res.data.messages;
+        const messages: IMessage[] = res.data.messages as IMessage[];
         MessageManager.commitFetchedMessages({ Messages: messages});
     }
     return;
 }
 
 
-export async function getMesgById 
-    (context: BareActionContext<MessagesState, RootState>, mesg_id: number):
-     Promise<IMessage | undefined> {
-    
-    const bMesg  = await MessageManager._getBMesgById(mesg_id);
+export async function getMesgByIdAction(
+    context: BareActionContext<MessagesState, RootState>, messageId: number):
+    Promise<IMessage | undefined> {
 
-    if (!bMesg){
+    const bMesg  = await MessageManager.getStoreMesgById(messageId);
+    if (!bMesg) {
         return undefined;
     }
-    const path = '/messages/' + mesg_id;
+    const path = '/messages/' + messageId;
     Vue.axios.defaults.headers.common['Authorization'] =
                                'Bearer ' + localStorage.getItem('token');
     const res = await Vue.axios.get(path);
-    
+
     if (await res.data != null) {
-        let message:IMessage =<IMessage>  res.data.message;
-        MessageManager.commitFullFetchedMessage({ Message: message});        
+        const message: IMessage = res.data.message as IMessage;
+        MessageManager.commitFullFetchedMessage({ Message: message});
     }
   }

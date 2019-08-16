@@ -9,7 +9,7 @@
             <!-- <button type="button" class="btn btn-success btn-sm" v-b-modal.Message-modal>Add Message</button> -->
             <button type="button" class="btn btn-success btn-sm" @click.prevent="toggleAddMessage">Add Message</button>
             <br><br>
-            <AddMessage @savedMessage="messageSaved" v-if="addNew"/>
+            <AddMessage @added_message="addedMessage" v-if="addNew"/>
             <br><br>
             <ViewMessage :message=message  :showMessage=showMessage v-if="showMessage"/>
             <table class="table table-hover">
@@ -59,16 +59,16 @@
 </template>
 
 <script lang="ts">
-// import { Component, Prop } from 'vue-property-decorator';
+import {  Prop } from 'vue-property-decorator';
 
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import axios from 'axios';
 
 import AddMessage from '@/components/AddMessage.vue';
 import ViewMessage from '@/components/ViewMessage.vue';
 import MessageManager from '../store/message/message';
 import { IMessage } from '../store/message/state';
+
 
 @Component({
     name: 'MessagesComp',
@@ -77,48 +77,46 @@ import { IMessage } from '../store/message/state';
         ViewMessage,
     },
 })
-
 export default class MessagesComp extends Vue {
-
-    private messages: any = null;
     private message: any;
     private showMessage: boolean =  false;
     private addNew: boolean = false;
 
+    // @Prop({type: Object as () => IMessage})
+    // public messages!: IMessage[]; // notice the bang saying to compiler not to warn about no initial value
+
     public mounted() {
       this.fetchMessages();
     }
-    private openMessage(id: number) {
-        MessageManager._getBMesgById(id)
-        .then(mesg => {
-            if (! mesg || !mesg.content) {
-                MessageManager.dispatchGetMessage(id).then( res=>{
-                    MessageManager._getBMesgById(id).then(r => {
-                        this.message = r;                    
-                        this.showMessage = true;
-                    });                    
-                });
-            } else {
-                this.message = mesg;
-            }
-        });        
+
+    get messages() {
+        return MessageManager.state.messages;
     }
-    private messageSaved() {
-        alert('cool');
-        //this.message = 'Succeuful';
-        this.showMessage = true;
+
+    private openMessage(id: number) {
+        // this fetches it and commits it to the store.
+        MessageManager.dispatchGetMessage(id).then( (res) => {
+            // now get it from the store
+            MessageManager.getStoreMesgById(id).then((r) => {
+                this.message = r;
+                alert(this.message.content);
+                this.showMessage = true;
+            });
+        });
+
+    }
+    private addedMessage() {
+        // alert('cool');
+        // this.showMessage = true;
     }
     private toggleAddMessage() {
         this.addNew = !this.addNew;
     }
     private fetchMessages() {
-        MessageManager.dispatchGetMessages().then(response => {
-            console.log(response);
-            this.messages = MessageManager.state.messages;
+        MessageManager.dispatchGetMessages().then((response) => {
+            // console.log(MessageManager.state.messages);
         });
     }
-
-
 }
 
 </script>

@@ -45,11 +45,18 @@ def get_one_message(current_user, message_id):
 @token_required
 def create_message(current_user):
     data = request.get_json()
-    new_message_id = MessageService.create(
+    message = MessageService.create(
                     {'title': data['title'],'content': data['content']},
                     created_by_user=current_user)
-    
-    return jsonify({'message' : f'New message created! id:{new_message_id}'}), 201
+
+    created_user = UserService.get_by_id(message.created_user_id)
+    result = {"title":message.title,
+              "created_username": created_user.username,
+              "id": message.id,
+              "created_date": message.created_date,
+              "read_by":  created_user.username
+              }
+    return jsonify({'message': result}), 201
 
 
 @mod.route('/messages/<message_id>', methods=['PUT'])

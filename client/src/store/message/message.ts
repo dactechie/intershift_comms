@@ -1,27 +1,24 @@
 import { getStoreBuilder } from 'vuex-typex';
-import { MessagesState, IMessage } from './state';
+import { MessagesState } from './state';
 import { RootState } from '../index';
-import { addMessageAction, getMessagesAction, getMesgById } from './actions';
+import { addMessageAction, getMessagesAction, getMesgByIdAction as getMesgByIdAction } from './actions';
 import { addMessageMut, clearMessagesMut, fetchedMessagesMut, fullFetchedMessageMut } from './mutations';
-import { getBasicMesgById } from './getters';
+import { getById } from './getters';
 
 const initialState: MessagesState = {
-    messages: [],    
+    messages: [],
 };
 
 const mb = getStoreBuilder<RootState>().module<MessagesState>('message', initialState);
-
-const _getBMessageById= mb.read((state) => getBasicMesgById, "message"); //(state: MessagesState, mesg_id: number)
-// const getMessages= mb.read((state) => getMesgs, "message"); //(state: MessagesState, mesg_id: number)
-
 const stateReader = mb.state();
+const getFromStoreById = mb.read((state) => getById, 'message');
 
 const MessageManager = {
     // getters + methods
     get state() { return stateReader(); },
-    //getById(mesg_id: number) { return getMessageById()(stateReader(), mesg_id); },
-    _getBMesgById(mesg_id: number) { return _getBMessageById()(stateReader(), mesg_id); },
-
+    getStoreMesgById(mesgId: number) {
+        return getFromStoreById()(stateReader(), mesgId);
+    },
     // mutations
     commitAddMessage: mb.commit(addMessageMut),
     commitClearMessages: mb.commit(clearMessagesMut),
@@ -31,13 +28,12 @@ const MessageManager = {
     // actions
     dispatchDelayedAppend: mb.dispatch(addMessageAction),
     dispatchGetMessages : mb.dispatch(getMessagesAction),
-    dispatchGetMessage : mb.dispatch(getMesgById),
+    dispatchGetMessage : mb.dispatch(getMesgByIdAction),
 };
-
-// Message.commitAddMessage({ Message: { created_date: new Date(1980, 2, 3), title: "Louise" } })
 
 export default MessageManager;
 export { mb as MessageModuleBuilder };
+
 
 
 
