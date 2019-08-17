@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request, make_response
 from apis.auth.service import token_required
-from apis.admin.service import UserService
+from apis.admin.service import get_by_id as get_user
 from extensions import db
-from .service import MessageService
+from .service import set_reader, get_all, get_by_id, update, delete, create
 from .models import Messages
 
 mod = Blueprint('messages', __name__)
@@ -11,7 +11,7 @@ mod = Blueprint('messages', __name__)
 @mod.route('/messages', methods=['GET'])
 @token_required
 def get_all_messages(current_user):
-    output = MessageService.get_all()
+    output = get_all()
     
     return jsonify({'messages': output})
 
@@ -20,7 +20,7 @@ def get_all_messages(current_user):
 @token_required
 def get_one_message(current_user, message_id):
     
-    message:Messages = MessageService.get_by_id(message_id=message_id)
+    message:Messages = get_by_id(message_id=message_id)
     if not message:
         return jsonify({'message':'No message found'})
         
@@ -28,9 +28,9 @@ def get_one_message(current_user, message_id):
         #TODO update the last read time
         pass
     else:
-        MessageService.set_reader(message, current_user)
+        set_reader(message, current_user)
 
-    created_user = UserService.get_by_id(message.created_user_id)
+    created_user = get_user(message.created_user_id)
 
     result = {"title":message.title,
               "content":message.message_contents.content,
@@ -45,11 +45,11 @@ def get_one_message(current_user, message_id):
 @token_required
 def create_message(current_user):
     data = request.get_json()
-    message = MessageService.create(
+    message = create(
                     {'title': data['title'],'content': data['content']},
                     created_by_user=current_user)
 
-    created_user = UserService.get_by_id(message.created_user_id)
+    created_user = get_user(message.created_user_id)
     result = {"title":message.title,
               "created_username": created_user.username,
               "id": message.id,
@@ -65,12 +65,12 @@ def edit_message(current_user, message_id):
     if not current_user.admin:
         return jsonify({'message':'Cannot perform that function'})
 
-    message = MessageService.get_by_id(message_id=message_id)
+    message = get_by_id(message_id=message_id)
     if not message:
         return jsonify({'message':'No message found'})
     
     data = request.get_json()
-    message = MessageService.update({'title': data['title'],
+    message = update({'title': data['title'],
                                     'content': data['content'],
                                     'created_user_id':current_user.id},
                                     message)
@@ -84,12 +84,12 @@ def delete_message(current_user, message_id):
     if not current_user.admin:
         return jsonify({'message':'Cannot perform that function'})
     
-    message =  MessageService.get_by_id(message_id=message_id)
+    message = get_by_id(message_id=message_id)
     
     if not message:
         return jsonify({'message':'No message found'})
 
-    MessageService.delete(message)
+    delete(message)
 
     return jsonify({'message': 'the message has been deleted.'}), 204
 

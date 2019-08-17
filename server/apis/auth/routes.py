@@ -1,8 +1,8 @@
 
 
 from flask import Blueprint, jsonify, request, make_response
-from apis.admin.service import UserService
-from .service import AuthService, token_required
+from apis.admin.service import get_by_username
+from .service import get_token_ifok, token_required
 import json
 
 mod = Blueprint('auth', __name__)
@@ -33,11 +33,11 @@ def login():
     if not auth or not username or not auth['password']:
         return _unableToLogin()
 
-    user = UserService.get_by_username(username)
+    user = get_by_username(username)
     if not user:
         return _unableToLogin()
     
-    decoded_token = AuthService.get_token_ifok(user, auth['password'])
+    decoded_token = get_token_ifok(user, auth['password'])
     if decoded_token:
         return jsonify({'token': decoded_token})
 

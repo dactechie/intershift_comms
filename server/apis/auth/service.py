@@ -25,17 +25,15 @@ def token_required(f):
     return decorated
 
 
-class AuthService():
-        
-    @staticmethod
-    def get_token_ifok(user:User, auth_password:str):
 
-        if check_password_hash(user.password, auth_password):            
-            token  = jwt.encode({'public_id': user.public_id, 
-                                'exp': datetime.datetime.utcnow() +
-                                       datetime.timedelta(seconds=app.config['TOKEN_EXPIRATION_SECONDS']),
-                                }, app.config['SECRET_KEY'])
+def get_token_ifok(user:User, auth_password:str):
 
-            return token.decode('UTF-8')
-        else: 
-            return None
+    if check_password_hash(user.password, auth_password):            
+        token  = jwt.encode({'public_id': user.public_id, 
+                            'exp': datetime.datetime.utcnow() +
+                                    datetime.timedelta(seconds=app.config['TOKEN_EXPIRATION_SECONDS']),
+                            }, app.config['SECRET_KEY'])
+
+        return token.decode('UTF-8')
+    else: 
+        return None
