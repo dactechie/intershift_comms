@@ -1,7 +1,7 @@
 import { getStoreBuilder } from 'vuex-typex';
 import { MessagesState } from './state';
 import { RootState } from '../index';
-import { addMessageAction, getMessagesAction, getMesgByIdAction as getMesgByIdAction } from './actions';
+import { addMessageAction, getMessagesAction, getMesgByIdAction } from './actions';
 import { addMessageMut, clearMessagesMut, fetchedMessagesMut, fullFetchedMessageMut } from './mutations';
 import { getById } from './getters';
 
@@ -33,8 +33,6 @@ const MessageManager = {
 
 export default MessageManager;
 export { mb as MessageModuleBuilder };
-
-
 
 
 // const getMessageById= mb.read((state) => (state: MessagesState, mesg_id: number) => {

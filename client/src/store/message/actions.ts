@@ -35,7 +35,7 @@ export async function getMesgByIdAction(
     context: BareActionContext<MessagesState, RootState>, messageId: number):
     Promise<IMessage | undefined> {
 
-    const bMesg  = await MessageManager.getStoreMesgById(messageId);
+    const bMesg  = MessageManager.getStoreMesgById(messageId);
     if (!bMesg) {
         return undefined;
     }

@@ -3,6 +3,7 @@
       <b-modal ref="viewMessageModal"
             id="Message-modal"
             title="View Message"
+            v-show="true"
             hide-footer>
            
             <b-form class="w-100">
@@ -50,7 +51,17 @@ import { Component, Prop } from 'vue-property-decorator';
 export default class ViewMessage extends Vue {
 
     @Prop() private message!: IMessage;
-    @Prop(Boolean) private showMessage!: boolean;
+    // @Prop(Boolean) private showMessage!: boolean;
+
+    // $refs: {
+    //   viewMessageModal: HTMLEl
+    // }
+
+
+    // public mount() {
+    //   this.$refs['my-modal'].show();
+    //   this.$refs.viewMessageModal.show();
+    // }
 
     public beforeDestroy() {
         // this.showMessage = false;

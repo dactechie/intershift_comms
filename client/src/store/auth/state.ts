@@ -1,4 +1,10 @@
 export interface AuthState {
-    userID: string;
+    username: string;
     isLoggedIn: boolean;
+}
+
+export interface IAuthCredentials {
+    username: string;
+    password: string;
+    token: string;
 }

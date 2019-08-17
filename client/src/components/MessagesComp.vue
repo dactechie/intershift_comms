@@ -11,23 +11,25 @@
             <br><br>
             <AddMessage @added_message="addedMessage" v-if="addNew"/>
             <br><br>
-            <ViewMessage :message=message  :showMessage=showMessage v-if="showMessage"/>
+            <ViewMessage :message=message v-if="showMessage"/>
             <table class="table table-hover">
                 <thead>
                     <tr>
-                    <th scope="col">Title</th>                    
+                            
                     <th scope="col">Created by</th>
+                    <th scope="col">Title</th>
                     <th scope="col">Create date</th>
                     <th scope="col">Read by</th>
                     <!-- <th scope="col">Read?</th> -->
                     <th></th>
                     </tr>
                 </thead>
-                <tbody>
-                <tr v-for="article in messages" v-bind:key="article.id">        
-                    <td>{{article.title}}</td>                    
+                <tbody> 
+                     <!-- :class="article.isSeenByMe" -->
+                <tr v-for="article in messages" :key="article.id" :class="article.read_by | seenByMe">
                     <td>{{article.created_username}}</td>
-                    <td>{{article.created_date}}</td>
+                    <td>{{article.title}}</td>
+                    <td>{{article.created_date | friendlyDate}}</td>
                     <td>{{article.read_by}}</td>
                     <td>
                         <div class="btn-group" role="group">
@@ -59,14 +61,16 @@
 </template>
 
 <script lang="ts">
-import {  Prop } from 'vue-property-decorator';
 
 import Vue from 'vue';
 import Component from 'vue-class-component';
-
+// import {  Prop } from 'vue-property-decorator';
+import { friendlyDate } from '../filters/date-formatters';
+import { seenByMe } from '../filters/text-formatters';
 import AddMessage from '@/components/AddMessage.vue';
 import ViewMessage from '@/components/ViewMessage.vue';
 import MessageManager from '../store/message/message';
+import AuthManager from '../store/auth/auth';
 import { IMessage } from '../store/message/state';
 
 
@@ -76,21 +80,50 @@ import { IMessage } from '../store/message/state';
         AddMessage,
         ViewMessage,
     },
+    filters: {
+        friendlyDate,
+        seenByMe,
+    },
 })
 export default class MessagesComp extends Vue {
     private message: any;
     private showMessage: boolean =  false;
     private addNew: boolean = false;
+    private currentLoggedInUser: string = '' ;
 
     // @Prop({type: Object as () => IMessage})
     // public messages!: IMessage[]; // notice the bang saying to compiler not to warn about no initial value
 
     public mounted() {
+      this.currentLoggedInUser = AuthManager.getLoggedInUser();
       this.fetchMessages();
     }
+    // private isReadByMe(message_reader: string) {
+    //     return message_reader === this.currentLoggedInUser;
+    // }
+
+    // public isNewForMe(messageId: number) {
+    //     console.log(messageId);
+    //     const message = this.messages.find((m) => {
+    //         return m.id === messageId;
+    //     });
+    //     if (message.read_by.includes(this.currentLoggedInUser)){
+    //             return 'unseen';
+    //     }
+
+    //     return 'normal';
+
+    // }
 
     get messages() {
-        return MessageManager.state.messages;
+        const ms = MessageManager.state.messages;
+        // ms.forEach( (m) => {
+        //     if (m.read_by.findIndex(this.isReadByMe) == -1) {
+        //         m['read'] = 'unseen';
+        //     }
+        // });
+        return ms;
+
     }
 
     private openMessage(id: number) {
@@ -99,6 +132,7 @@ export default class MessagesComp extends Vue {
             // now get it from the store
             MessageManager.getStoreMesgById(id).then((r) => {
                 this.message = r;
+                // this.message['isNew'] = '';
                 alert(this.message.content);
                 this.showMessage = true;
             });
@@ -107,7 +141,6 @@ export default class MessagesComp extends Vue {
     }
     private addedMessage() {
         // alert('cool');
-        // this.showMessage = true;
     }
     private toggleAddMessage() {
         this.addNew = !this.addNew;
@@ -120,3 +153,12 @@ export default class MessagesComp extends Vue {
 }
 
 </script>
+<style lang="css" scoped>
+
+.unseen {
+    font-weight: bold;
+}
+.seen {
+    font-weight: normal;
+}
+</style>

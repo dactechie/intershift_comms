@@ -35,6 +35,8 @@
 
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import AuthManager from '../store/auth/auth';
+import { IAuthCredentials } from '../store/auth/state';
 
 @Component ({
   name: 'Login',
@@ -50,8 +52,15 @@ export default class Login extends Vue {
         (this as any).$auth
             .login({ email: this.email,
                      password : this.password })
-            .then((response: any) => {
-                localStorage.setItem('token', response.data.token);
+            .then((response: any)  => {
+                AuthManager.dispatchLogin(       {
+                        username: this.email,
+                        password: '',
+                        token:  response.data.token,
+                    } as IAuthCredentials);
+            })
+            .then(() => {
+                // localStorage.setItem('token', response.data.token);
                 this.$router.push('/');
             });
         // Execute application logic after successful login
