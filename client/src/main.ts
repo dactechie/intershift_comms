@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import BootstrapVue from 'bootstrap-vue';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+
 import VueAuthenticate from 'vue-authenticate';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
@@ -11,22 +9,15 @@ import router from './router';
 import App from './App.vue';
 import { buildStore } from './store/index';
 
+import vuetify from '@/plugins/vuetify';
+
+
 Vue.use(Vuex);
 const builtStore = buildStore();
 
 Vue.config.productionTip = false;
-Vue.use(BootstrapVue);
 
 (Vue as any).router = router;
-
-// const config = {
-//   timeout: 1500,
-//   baseURL: 'http://localhost:5000',
-//   ...axios.defaults,
-// };
-
-// const axiosInstance = axios.create(config);
-// Vue.use(VueAxios, axiosInstance);
 
 Vue.use(VueAxios, axios);
 Vue.axios.defaults.baseURL = 'http://localhost:5000';
@@ -34,6 +25,8 @@ Vue.axios.defaults.baseURL = 'http://localhost:5000';
 Vue.use(VueAuthenticate, {
   baseUrl: 'http://localhost:5000', // Your API domain
 });
+
+
 
 
 // not working https://github.com/dgrubelic/vue-authenticate/issues/33
@@ -64,6 +57,7 @@ Vue.use(VueAuthenticate, {
 const vm  = new Vue({
   router,
   store: builtStore,
+  vuetify,
   render: (h) => h(App),
 }).$mount('#app');
 

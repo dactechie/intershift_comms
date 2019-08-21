@@ -12,7 +12,7 @@
               <small>{{message.created_date| friendlyDate}} </small>
             </v-col>
             <v-col>
-              <strong>{{message.title}}</strong>
+              <div :class="seenByMe">{{message.title}}</div>
               <div class="caption">Read by: {{message.read_by}}</div>
             </v-col>
         </v-row>
@@ -62,9 +62,21 @@ import { friendlyDate } from '../filters/date-formatters';
 
     }),
     computed: {
-
+      seenByMe() {
+         return this.message['read_by_me'] ? 'seen' : 'new';
+      }
     },
     methods: {
     },
   }
 </script>
+
+<style scoped>
+
+.new {
+    font-weight: bold;
+}
+.seen {
+    font-weight: normal;
+}
+</style>

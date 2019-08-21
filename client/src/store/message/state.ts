@@ -5,6 +5,7 @@ export interface IMessage {
     created_username?: string;
     created_date?: Date;
     read_by?: string[];
+    read_by_me?: boolean;
     update_date?: Date;
 }
 

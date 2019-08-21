@@ -16,7 +16,7 @@ import Component from 'vue-class-component';
 export default class Logout extends Vue {
     private mounted() {
         localStorage.removeItem ('token');
-        this.$router.push('/');
+        this.$router.push('/login');
     }
 }
 

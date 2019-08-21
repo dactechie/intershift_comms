@@ -5,35 +5,31 @@
             title="Add a new Message"
             hide-footer>
             -->
-            <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" class="w-100">
-            <b-form-group id="form-title-group"
-                            label="Title:"
-                            label-for="form-title-input">
-                <b-form-input id="form-title-input"
+            <v-form @submit.prevent="onSubmit" @reset.prevent="onReset" class="w-100">
+      
+                <v-text-field id="form-title-input"
                                 type="text"
                                 v-model="title"
                                 required
                                 placeholder="Enter title">
-                </b-form-input>
-                </b-form-group>
-                <b-form-group id="form-content-group"
-                            label="Content:"
-                            label-for="form-content-input">
-                    <textarea id="form-content-input"
+                </v-text-field>
+             
+        
+                    <v-textarea id="form-content-input"
                                 rows="8"
                                 v-model="content"
                                 required
                                 placeholder="Enter your message (at least 10 characters)"
                                 v-on:keydown.enter="$event.stopPropagation()">
-                    </textarea>
-                </b-form-group>
+                    </v-textarea>
+              
 
 
-                <b-button-group>
-                <b-button type="submit" variant="primary">Submit</b-button>
-                <b-button type="reset" variant="danger">Reset</b-button>
-                </b-button-group>
-            </b-form>
+            
+                <v-btn type="submit" variant="primary">Submit</v-btn>
+                <v-btn type="reset" variant="danger">Reset</v-btn>
+            
+            </v-form>
 
         <!-- </b-modal> -->
        

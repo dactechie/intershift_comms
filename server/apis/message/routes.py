@@ -12,14 +12,18 @@ mod = Blueprint('messages', __name__)
 @token_required
 def get_all_messages(current_user):
     output = get_all()
-    
+
+    for m in output:
+        print(current_user.username)
+        m['read_by_me'] = current_user.username in m['read_by']
+
     return jsonify({'messages': output})
 
 
 @mod.route('/messages/<message_id>', methods=['GET'])
 @token_required
 def get_one_message(current_user, message_id):
-    
+
     message:Messages = get_by_id(message_id=message_id)
     if not message:
         return jsonify({'message':'No message found'})
@@ -68,13 +72,13 @@ def edit_message(current_user, message_id):
     message = get_by_id(message_id=message_id)
     if not message:
         return jsonify({'message':'No message found'})
-    
+
     data = request.get_json()
     message = update({'title': data['title'],
                                     'content': data['content'],
                                     'created_user_id':current_user.id},
                                     message)
-  
+
     return jsonify({'message': 'the message has been edited'})
 
 
@@ -83,9 +87,8 @@ def edit_message(current_user, message_id):
 def delete_message(current_user, message_id):
     if not current_user.admin:
         return jsonify({'message':'Cannot perform that function'})
-    
-    message = get_by_id(message_id=message_id)
-    
+
+    message = get_by_id(message_id=message_id)    
     if not message:
         return jsonify({'message':'No message found'})
 

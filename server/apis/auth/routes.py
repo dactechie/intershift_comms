@@ -30,7 +30,7 @@ def login():
         auth = request.authorization    # for Postman
         username = auth['username']
    
-    if not auth or not username or not auth['password']:
+    if not username or not auth['password']:
         return _unableToLogin()
 
     user = get_by_username(username)
