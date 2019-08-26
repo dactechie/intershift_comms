@@ -1,3 +1,4 @@
+import Vue from 'vue'
 export const STORAGE_KEY = 'messages-vuejs'
 
 // for testing
@@ -19,6 +20,9 @@ export const mutations = {
     message.done = done
   },
   updateMessages (state, messages) {
-      state.messages = messages
+      console.log("state", state)
+      console.log("messages", messages)
+      Vue.set(state, 'messages', messages)
+      //state.messages = messages
   }
 }

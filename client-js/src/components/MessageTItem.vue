@@ -66,6 +66,9 @@ import { friendlyDate } from '../filters/date-formatters';
          return this.message['read_by_me'] ? 'seen' : 'new';
       }
     },
+    mounted(){
+        console.log("in comp", this.message)  
+    },
     methods: {
     },
   }

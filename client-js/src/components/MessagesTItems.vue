@@ -10,29 +10,36 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import MessageTItem from './MessageTItem'
+
 
 export default {
     components: {
         MessageTItem,
     },
     computed: {
+        ...mapGetters([
+            'load_messages',
+        ]),
         messages () {
-            return this.$store.state.messages
+            return this.$store.getters.load_messages
+            
         },
     },    
     mounted: function ()  {
-         // this.$nextTick(function () {
+         this.$nextTick(function () {
             // Code that will run only after the
             // entire view has been rendered
-            this.getMessages()
-       // })
+            this.LOAD_MESSAGES()
+        })
     },
     methods: {
-        ...mapActions({
-            getMessages: 'LOAD_MESSAGES',        
-        }),
+        ...mapActions([
+            'LOAD_MESSAGES',
+        ]),
+
+
     },
     // data ()  {
     // //     return {
