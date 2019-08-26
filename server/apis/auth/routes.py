@@ -25,10 +25,10 @@ def login():
     username = None
     if request.data:
         auth = json.loads(request.data.decode('utf-8'))
-        username = auth['email']
+        # username = auth['email']
     else:
         auth = request.authorization    # for Postman
-        username = auth['username']
+    username = auth['username']
    
     if not username or not auth['password']:
         return _unableToLogin()
