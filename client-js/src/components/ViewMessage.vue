@@ -1,14 +1,9 @@
 <template>
     <v-btn
-      bottom
-      color="pink"
-      dark
-      fab
-      fixed
-      right
       @click="dialog = !dialog"
     >
-      <v-icon>add</v-icon>
+     <v-icon>view</v-icon>
+    {{title}}
 
      <v-dialog
       v-model="dialog"
@@ -16,74 +11,71 @@
     >
       <v-card>
         <v-card-title class="grey darken-2">
-          Create a shift handover note.
+          View a shift handover note.
         </v-card-title>
         <v-container>
           <v-row >
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="message.title"
-                placeholder="Title"
+                v-model="viewingMessage.title"
+                :readonly="true"
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
               <v-textarea
-                v-model="message.content"
-                auto-grow
+                v-model="viewingMessage.content"
+                :readonly="true"               
                 full-width
                 outlined
                 label="Notes"
-                placeholder="Notes"
               ></v-textarea>
             </v-col>
           </v-row>
         </v-container>
         <v-card-actions>
-          <v-btn
+          <!-- <v-btn
             text
             color="primary"
-          >More</v-btn>
+          >More</v-btn> -->
           <v-spacer></v-spacer>
           <v-btn
             text
             color="primary"
-            @click="dialog = false"
-          >Cancel</v-btn>
-          <v-btn
-            text
-            @click="addMessage"
-          >Save</v-btn>
+            @click="dialog = !dialog"
+          >Close</v-btn>
+
         </v-card-actions>
       </v-card>
     </v-dialog>
-        </v-btn>
+    </v-btn>
 </template>
 
 <script>
 
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
     data: () => ({
       dialog: false,
-      message: {
-          title: '',
-          content: '',
-      },
     }),
+    
+    props: ["message_id", "title"],
+
+    computed: mapState([
+            'viewingMessage'
+    ]),
+    mounted() {
+        this.LOAD_MESSAGE(this.message_id)
+    },
     methods: {
         ...mapActions([
-            'ADD_MESSAGE',
+            'LOAD_MESSAGE',
         ]),
-        addMessage: function () {
-            let _this = this
-            this.ADD_MESSAGE(this.message).then(() => {
-                console.log("added message")
-                _this.dialog = false
-            })
-        }
-    },
+        // closeMe(){
+        //     this.$emit('closeViewer')
+        // }
+    }
 }
 </script>

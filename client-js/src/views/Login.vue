@@ -29,8 +29,6 @@
 
 <script lang="js">
 
-// import AuthManager from '../store/auth/auth';
-
 export default {
 
     data() {
@@ -49,13 +47,9 @@ export default {
             this.$store.dispatch('LOGIN_ACTION', {
                 username: this.email,
                 password: this.password,
+            }).then(() => {
+                this.$router.push('/')
             })
-
-            //     .then(() => {
-            //         // localStorage.setItem('token', response.data.token);
-            //         this.$router.push('/');
-            //     });
-            // Execute application logic after successful login
         }
     }
 }

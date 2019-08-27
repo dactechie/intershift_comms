@@ -8,7 +8,7 @@ if (navigator.userAgent.indexOf('PhantomJS') > -1) {
 
 export const mutations = {
   addMessage (state, message) {
-    state.messages.push(message)
+      state.messages.unshift(message)
   },
 
   removeMessage (state, message) {
@@ -24,5 +24,8 @@ export const mutations = {
       console.log("messages", messages)
       Vue.set(state, 'messages', messages)
       //state.messages = messages
+  },
+  setViewingMessage(state, message) {
+    Vue.set(state, 'viewingMessage', message)
   }
 }

@@ -23,8 +23,7 @@ export default {
             'load_messages',
         ]),
         messages () {
-            return this.$store.getters.load_messages
-            
+            return this.$store.getters.load_messages            
         },
     },    
     mounted: function ()  {
@@ -38,29 +37,7 @@ export default {
         ...mapActions([
             'LOAD_MESSAGES',
         ]),
-
-
     },
-    // data ()  {
-    // //     return {
-    // //     messages: [
-    // //         {
-    // //             id: 1,
-    // //             author: "MJ",
-    // //             title: " Title 1 !",
-    // //             contentBrief: "Lorem ipsum dolor sit amet consec...",
-    // //             datetime: "12/8/2019 (Yesterday at 5pm)",
-    // //         },
-    // //         {
-    // //             id: 2,
-    // //             author: "MD",
-    // //             title: " Meg's Title !",
-    // //             contentBrief: "Meg's messaage Lorem ipsum dolor sit amet consec...",
-    // //             datetime: "13/8/2019 (Today at 3pm)",
-    // //         }
-    // //     ]
-    // //   }
-    // }
 }
 
 </script>

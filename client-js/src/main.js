@@ -14,13 +14,27 @@ Vue.config.productionTip = false
 const baseAxios = axios.create({
   baseURL: 'http://127.0.0.1:5000'
 })
-Vue.use(VueAxios, baseAxios);
+
 
 // Vue.prototype.$http = baseAxios
 
 // Vue.use(VueAuthenticate, {
 //   baseUrl: 'http://localhost:5000', // Your API domain
 // });
+baseAxios.interceptors.response.use(function (response) {
+    return response
+  }, 
+  function (error) {
+      console.debug("interceptor error", error)
+      store.dispatch('LOGOUT_ACTION')
+      router.push('/login')
+  
+    return Promise.reject(error)
+  })
+
+Vue.use(VueAxios, baseAxios)
+
+
 
 new Vue({
   router,
@@ -29,3 +43,19 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
+// router.beforeEach((to, from, next) => {
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//       // this route requires auth, check if logged in
+//       // if not, redirect to login page.
+//       if (!auth.loggedIn()) {
+//         next({
+//           path: '/login',
+//           query: { redirect: to.fullPath }
+//         })
+//       } else {
+//         next()
+//       }
+//     } else {
+//       next() // make sure to always call next()!
+//     }
+//   })

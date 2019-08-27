@@ -8,15 +8,22 @@
             <span class="white--text sm-1">{{message.created_username[0]}}</span>
         </template>
         <v-row class="pt-1">
+           
             <v-col cols="3">
               <small>{{message.created_date| friendlyDate}} </small>
             </v-col>
             <v-col>
-              <div :class="seenByMe">{{message.title}}</div>
+                
+                     <div :class="seenByMe">{{message.title}}
+                        <!-- <ViewMessage  :message_id="message.id" :title="message.title"/> -->
+                    </div> 
+                
               <div class="caption">Read by: {{message.read_by}}</div>
             </v-col>
+           
         </v-row>
   </v-timeline-item>
+  
     <!-- <v-timeline-item
         fill-dot
         class="white--text mb-12"
@@ -50,8 +57,14 @@
 </template>
 
 <script>
-import { friendlyDate } from '../filters/date-formatters';
-  export default {
+
+import ViewMessage from './ViewMessage'
+import { friendlyDate } from '../filters/date-formatters'
+
+export default {
+    components:{
+        ViewMessage
+    },
     filters: {
         friendlyDate,
     //    seenByMe,
@@ -59,7 +72,7 @@ import { friendlyDate } from '../filters/date-formatters';
     props : ["message"],
     
     data: () => ({
-
+        dialog: false,
     }),
     computed: {
       seenByMe() {

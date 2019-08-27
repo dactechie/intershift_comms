@@ -14,19 +14,19 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
-      meta: {auth: true},
+      meta: {requiresAuth: true},
     },
     {
       path: '/logout',
       name: 'logout',
       component: Logout,
-      meta: {auth: true,  redirect: {name: 'default'}},
+      meta: {requiresAuth: true,  redirect: {name: 'default'}},
     },
     {
       path: '/login',
       name: 'login',
       component: Login,
-      meta: {auth: false,  redirect: {name: 'default'}},
+      meta: {requiresAuth: false,  redirect: {name: 'default'}},
     },
     {
       path: '/about',

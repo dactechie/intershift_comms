@@ -13,7 +13,7 @@ export default {
         //   }
         // });
         let result = response.data.message
-        //console.log("going to commit ", result)
+        console.log("going to commit ", result)
         commit('addMessage', result)
 
       } catch(err){
@@ -50,9 +50,25 @@ export default {
 
         } catch(err){
           console.error(err)
-        }
-      
-      
+        }      
+    },
+    LOAD_MESSAGE : async function getMessage ({commit}, message_id) {
+        try {
+          Vue.axios.defaults.headers.common['Authorization'] =
+                                       'Bearer ' + localStorage.getItem('token');
+          const response = await  Vue.axios.get('/messages/'+message_id,
+          {
+            headers: {
+              'Content-type': 'application/json'
+            }
+          });        
+          //console.log("going to commit", response.data.messages)
+          
+          commit('setViewingMessage', response.data.message)
+
+        } catch(err){
+          console.error(err)
+        }      
     }
     // toggleAll ({ state, commit }, done) {
     //   state.messages.forEach((message) => {

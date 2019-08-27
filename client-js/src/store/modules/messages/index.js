@@ -19,7 +19,8 @@ import getters from './getters'
 
 export default {
     state: {
-        messages: JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]')
+        messages: JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]'),
+        viewingMessage: {}
     },
     getters,
     actions,
