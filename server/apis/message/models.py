@@ -10,7 +10,7 @@ messages_read_users = db.Table('read_messages',
 class MessageContents(db.Model):
     __tablename__  = 'MessageContents'
     id = db.Column(db.Integer, primary_key = True)
-    content = db.Column(db.String(1000))
+    content = db.Column(db.String(2000))
     message_id = db.Column(db.Integer, db.ForeignKey('Messages.id'))
     meta = db.relationship("Messages", back_populates="message_contents")
     def __init__(self, content, message_id):
@@ -22,7 +22,10 @@ class Messages(db.Model):
     __tablename__  = 'Messages'
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(100))
+    with_action = db.Column(db.Boolean, unique=False, default=False)
     created_user_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    actioned_by = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    actioned_date = db.Column(db.DateTime(timezone=True))
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
     update_date = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     message_contents = db.relationship('MessageContents', back_populates='meta', uselist=False,

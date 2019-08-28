@@ -17,10 +17,12 @@ sqlite> .mode column
 sqlite> .headers on
 
 
-# changes to DB schema"
-1. cpy all models to setup_db.py with database : 'sqlite:///handover-migrate.db'
-2. python shell  >>> import and db.create()
-3. then python manage.py db migrate, then db upgrade
+# changes to DB schema"   ## WARNING ALTERs don't work with sqlite
+1. move handover.db to a folder up (server/)
+2. make changes to the model.py (under apis/auth or apis/message/)
+3. go back up to server/ and run python manage.py db migrate , then db upgrade
+4. move the handover.db back to the apis/ folder
+
 
 ----------
 Client Interface generation from sqlite DB : 

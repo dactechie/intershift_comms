@@ -4,10 +4,12 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python: Flask",
             "type": "python",
             "request": "launch",
+            "pythonPath": "C:\\Users\\aftab.jalal\\dev\\shift_handover\\server\\shft\\Scripts\\python.exe",
             "module": "flask",
             "env": {
                 "FLASK_APP": "server/app.py",

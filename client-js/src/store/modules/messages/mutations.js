@@ -15,9 +15,12 @@ export const mutations = {
     state.messages.splice(state.messages.indexOf(message), 1)
   },
 
-  editMessage (state, { message, text = message.text, done = message.done }) {
-    message.text = text
-    message.done = done
+  editMessage (state,  message ) {
+    var index = state.messages.findIndex (m=> m.id === message.id);
+    if (index !== -1) {
+        state.messages[index] = message;
+    }
+
   },
   updateMessages (state, messages) {
       console.log("state", state)
@@ -25,7 +28,15 @@ export const mutations = {
       Vue.set(state, 'messages', messages)
       //state.messages = messages
   },
-  setViewingMessage(state, message) {
-    Vue.set(state, 'viewingMessage', message)
+
+  setContent(state, message) {
+    let mesgIndex = state.messages.findIndex(m =>
+        m.id === message.id
+    )
+    if(mesgIndex > -1) {
+        state.messages[mesgIndex]['content'] = message.content
+    }
+    else
+        console.error("did not find message with id ", message.id)
   }
 }

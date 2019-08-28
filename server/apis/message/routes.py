@@ -2,7 +2,8 @@ from flask import Blueprint, jsonify, request, make_response
 from apis.auth.service import token_required
 from apis.admin.service import get_by_id as get_user
 from extensions import db
-from .service import set_reader, get_all, get_by_id, update, delete, create
+from .service import (set_reader, get_all, get_by_id,
+                 delete, create,updateActionedBy, updateWithAction)
 from .models import Messages
 
 mod = Blueprint('messages', __name__)
@@ -38,9 +39,14 @@ def get_one_message(current_user, message_id):
 
     result = {"title":message.title,
               "content":message.message_contents.content,
-              "created_username": created_user.username,
+              "created_username": created_user.username,              
               "id": message.id,
               "created_date": message.created_date}
+                  
+    if message.actioned_by:
+        result["actioned_by"] = message.actioned_by
+    elif message.with_action:        
+        result["with_action"] = message.with_action
 
     return jsonify({'message': result})
 
@@ -50,7 +56,10 @@ def get_one_message(current_user, message_id):
 def create_message(current_user):
     data = request.get_json()
     message = create(
-                    {'title': data['title'],'content': data['content']},
+                    {'title': data['title'],
+                    'content': data['content'],
+                    'with_action': data.get('with_action'),
+                    },
                     created_by_user=current_user)
 
     created_user = get_user(message.created_user_id)
@@ -58,7 +67,9 @@ def create_message(current_user):
               "created_username": created_user.username,
               "id": message.id,
               "created_date": message.created_date,
-              "read_by":  created_user.username
+              "with_action": message.with_action,
+              "read_by":  created_user.username,
+              "read_by_me": True,
               }
     return jsonify({'message': result}), 201
 
@@ -66,20 +77,24 @@ def create_message(current_user):
 @mod.route('/messages/<message_id>', methods=['PUT'])
 @token_required
 def edit_message(current_user, message_id):
-    if not current_user.admin:
-        return jsonify({'message':'Cannot perform that function'})
-
+    # if not current_user.admin:
+    #     return jsonify({'message':'Cannot perform that function'})
+    
     message = get_by_id(message_id=message_id)
     if not message:
         return jsonify({'message':'No message found'})
-
+    
     data = request.get_json()
-    message = update({'title': data['title'],
-                                    'content': data['content'],
-                                    'created_user_id':current_user.id},
-                                    message)
+    print(data)
+    if data['with_action'] and not message.with_action:
+        message = updateWithAction({'with_action': data['with_action']}, message)
+        return jsonify({'message': 'the message now requires an action'})
+    
+    if data['actioned_by'] and not message.actioned_by:
+        message = updateActionedBy({'actioned_by': data['actioned_by']}, message)
+        return jsonify({'message': 'the message has been actioned'})
 
-    return jsonify({'message': 'the message has been edited'})
+    return jsonify({'message': 'No changes were made'})
 
 
 @mod.route('/messages/<message_id>', methods=['DELETE'])

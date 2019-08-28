@@ -13,7 +13,7 @@ export default {
         //   }
         // });
         let result = response.data.message
-        console.log("going to commit ", result)
+        // console.log("going to commit ", result)
         commit('addMessage', result)
 
       } catch(err){
@@ -30,8 +30,17 @@ export default {
     //   commit('editmessage', { message, done: !message.done })
     // },
   
-    editMessage ({ commit }, { message, value }) {
-      commit('editMessage', { message, text: value })
+    UPDATE_MESSAGE : async function editMessages ({ commit }, message) {
+        try {
+            Vue.axios.defaults.headers.common['Authorization'] =
+                                         'Bearer ' + localStorage.getItem('token');
+            const response = await  Vue.axios.put('/messages/'+ message.id, message)
+            console.log("update response", response)
+    
+        } catch(err){
+            console.error(err)
+      }
+      commit('editMessage', message )
     },
   
     LOAD_MESSAGES : async function getMessages ({commit}) {
@@ -44,7 +53,7 @@ export default {
               'Content-type': 'application/json'
             }
           });        
-          //console.log("going to commit", response.data.messages)
+          // console.log("going to commit updateMessages", response.data.messages)
           
           commit('updateMessages', response.data.messages)
 
@@ -61,10 +70,8 @@ export default {
             headers: {
               'Content-type': 'application/json'
             }
-          });        
-          //console.log("going to commit", response.data.messages)
-          
-          commit('setViewingMessage', response.data.message)
+          });         
+          commit('setContent', response.data.message)
 
         } catch(err){
           console.error(err)

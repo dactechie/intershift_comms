@@ -41,10 +41,10 @@
           </v-row>
         </v-container>
         <v-card-actions>
-          <v-btn
-            text
-            color="primary"
-          >More</v-btn>
+        <v-checkbox 
+            v-model="message.with_action"
+            :label="`Requires Action ? ${message.with_action.toString()}`"
+            ></v-checkbox>
           <v-spacer></v-spacer>
           <v-btn
             text
@@ -68,9 +68,11 @@ import { mapActions } from 'vuex'
 export default {
     data: () => ({
       dialog: false,
+      
       message: {
           title: '',
           content: '',
+          with_action: false,
       },
     }),
     methods: {
@@ -80,7 +82,7 @@ export default {
         addMessage: function () {
             let _this = this
             this.ADD_MESSAGE(this.message).then(() => {
-                console.log("added message")
+                // console.log("added message")
                 _this.dialog = false
             })
         }

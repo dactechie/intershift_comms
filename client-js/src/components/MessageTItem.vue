@@ -14,11 +14,23 @@
             </v-col>
             <v-col>
                 
-                     <div :class="seenByMe">{{message.title}}
-                        <!-- <ViewMessage  :message_id="message.id" :title="message.title"/> -->
-                    </div> 
-                
+                     <div :class="seenByMe"> 
+                         <v-btn @click="showMessage" >
+                              {{message.title}} </v-btn>
+                         <!-- <v-btn @click="showMessage"> {{message.title}} </v-btn> -->
+                        <ViewMessage :message="message" @closeViewer="updateMessage" v-if="dialog"/>
+                  
+                <div v-if="message.with_action" >
+                    <div v-if="message.actioned_by" >
+                        Actioned by: {{ message.actioned_by }}
+                    </div>
+                    <div v-else>
+                        ! Requires Action !
+                    </div>
+                    
+                </div>
               <div class="caption">Read by: {{message.read_by}}</div>
+                </div> 
             </v-col>
            
         </v-row>
@@ -60,6 +72,7 @@
 
 import ViewMessage from './ViewMessage'
 import { friendlyDate } from '../filters/date-formatters'
+//import { mapActions } from 'vuex'
 
 export default {
     components:{
@@ -79,10 +92,23 @@ export default {
          return this.message['read_by_me'] ? 'seen' : 'new';
       }
     },
-    mounted(){
-        console.log("in comp", this.message)  
-    },
     methods: {
+        // ...mapActions([
+        //     'LOAD_MESSAGE',
+        // ]),
+        showMessage() {
+                this.message['read_by_me'] ='seen'
+                this.dialog = true
+        },
+        updateMessage(message) {
+            this.dialog = false
+            this.message.read_by = message['read_by']
+            if (message['actioned_by'] && this.message['with_action']) {
+                this.message['actioned_by'] = message['actioned_by']
+            }
+            
+        }
+
     },
   }
 </script>
@@ -91,6 +117,7 @@ export default {
 
 .new {
     font-weight: bold;
+    background-color: tomato;
 }
 .seen {
     font-weight: normal;

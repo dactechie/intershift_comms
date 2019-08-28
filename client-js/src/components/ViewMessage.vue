@@ -1,9 +1,4 @@
 <template>
-    <v-btn
-      @click="dialog = !dialog"
-    >
-     <v-icon>view</v-icon>
-    {{title}}
 
      <v-dialog
       v-model="dialog"
@@ -17,7 +12,7 @@
           <v-row >
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="viewingMessage.title"
+                v-model="message.title"
                 :readonly="true"
               ></v-text-field>
             </v-col>
@@ -25,7 +20,7 @@
           <v-row>
             <v-col>
               <v-textarea
-                v-model="viewingMessage.content"
+                v-model="content"
                 :readonly="true"               
                 full-width
                 outlined
@@ -35,47 +30,87 @@
           </v-row>
         </v-container>
         <v-card-actions>
-          <!-- <v-btn
-            text
-            color="primary"
-          >More</v-btn> -->
+        <div v-if="message.actioned_by">
+            Actioned by : {{message.actioned_by}}
+        </div>
+        <v-checkbox v-else-if="message.with_action && ! message.actioned_by"
+            v-model="actioned"
+            :label="`Mark Actioned ? ${actioned.toString()}`"
+            ></v-checkbox>
+          <div v-else>
+                 <v-checkbox 
+                    v-model="require_action_set_true"
+                    :label="`Requires Action ? ${require_action_set_true}`"
+                    >
+                </v-checkbox>
+          </div>
           <v-spacer></v-spacer>
           <v-btn
             text
             color="primary"
-            @click="dialog = !dialog"
+            @click="closeMe"
           >Close</v-btn>
 
         </v-card-actions>
       </v-card>
     </v-dialog>
-    </v-btn>
+
 </template>
 
 <script>
 
-import { mapActions, mapState } from 'vuex'
+import {  mapGetters, mapActions } from 'vuex'
 
 export default {
     data: () => ({
-      dialog: false,
+      dialog: true,
+      content: '',
+      actioned: false,
+      require_action_set_true: false,
     }),
-    
-    props: ["message_id", "title"],
+    props: ["message"],
+    computed: mapGetters(['load_messages']),
 
-    computed: mapState([
-            'viewingMessage'
-    ]),
-    mounted() {
-        this.LOAD_MESSAGE(this.message_id)
+    beforeMount () {       
+        if (this.message.content) {
+            this.content = this.message.content
+            //this.action_required = this.message.requires_action
+            return
+        }
+        this.LOAD_MESSAGE(this.message.id)
+        .then(() => {
+            let tmpMesg = this.load_messages.find(m =>
+                m.id === this.message.id )
+            this.content = tmpMesg.content
+            if (tmpMesg['with_action']) {
+                console.log(' with action? ', tmpMesg['with_action'])
+                this.with_action = true
+            }
+        })
+    },
+    beforeDestroy() {
+        console.log("before destroy")
+        // let tmpMesg = this.load_messages.find(m =>
+        //                         m.id === this.message.id )
+        if (!this.message.with_action && this.require_action_set_true){
+            this.message.with_action = true      
+            this.UPDATE_MESSAGE(this.message).then((response) =>{
+                console.log("update response", response)
+            })
+        }
     },
     methods: {
-        ...mapActions([
+            ...mapActions([
             'LOAD_MESSAGE',
+            'UPDATE_MESSAGE',
         ]),
-        // closeMe(){
-        //     this.$emit('closeViewer')
-        // }
+        closeMe(){
+            if (this.actioned){
+                this.message['actioned_by'] = 'me'
+            }
+            this.$emit('closeViewer', this.message)
+            this.dialog = false
+        }
     }
 }
 </script>
