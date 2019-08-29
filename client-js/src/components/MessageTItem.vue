@@ -5,7 +5,7 @@
         large
         >
         <template v-slot:icon>
-            <span class="white--text sm-1">{{message.created_username[0]}}</span>
+            <span class="white--text sm-1">{{message.created_username}}</span>
         </template>
         <v-row class="pt-1">
            
@@ -98,6 +98,7 @@ export default {
         // ]),
         showMessage() {
                 this.message['read_by_me'] ='seen'
+                this.message.read_by = 'me'
                 this.dialog = true
         },
         updateMessage(message) {

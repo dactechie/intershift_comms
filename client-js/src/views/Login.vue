@@ -43,7 +43,6 @@ export default {
     methods: {
 
         login: function() {
-            console.log(this.email)
             this.$store.dispatch('LOGIN_ACTION', {
                 username: this.email,
                 password: this.password,

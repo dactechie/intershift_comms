@@ -3,9 +3,7 @@ from sqlalchemy.sql import func
 from apis.message.models import messages_read_users
 
 
-
-class User(db.Model):
-     
+class User(db.Model):     
     __tablename__  = 'Users'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -20,9 +18,6 @@ class User(db.Model):
     read_messages = db.relationship('Messages', secondary=messages_read_users,
                                     backref=db.backref('readers', lazy='dynamic')
                                    )
-
-    # read_messages = db.relationship('ReadMessage',backref='user',
-    #                                 lazy="dynamic", cascade="all,delete")
 
     def __init__(self, username, password, public_id, admin):
         self.username = username

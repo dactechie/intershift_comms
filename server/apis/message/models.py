@@ -30,9 +30,10 @@ class Messages(db.Model):
     update_date = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     message_contents = db.relationship('MessageContents', back_populates='meta', uselist=False,
                                         cascade="all,delete")
-    def __init__(self, title, created_user_id):
+    def __init__(self, title, created_user_id, with_action=False):
         self.title = title        
         self.created_user_id = created_user_id
+        self.with_action = with_action
 
 
 

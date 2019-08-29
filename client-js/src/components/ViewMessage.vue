@@ -36,14 +36,12 @@
         <v-checkbox v-else-if="message.with_action && ! message.actioned_by"
             v-model="actioned"
             :label="`Mark Actioned ? ${actioned.toString()}`"
-            ></v-checkbox>
-          <div v-else>
-                 <v-checkbox 
-                    v-model="require_action_set_true"
-                    :label="`Requires Action ? ${require_action_set_true}`"
-                    >
-                </v-checkbox>
-          </div>
+        ></v-checkbox>
+        <v-checkbox v-else
+            v-model="require_action_set_true"
+            :label="`Requires Action ? ${require_action_set_true}`"
+        ></v-checkbox>
+        
           <v-spacer></v-spacer>
           <v-btn
             text
@@ -89,11 +87,13 @@ export default {
         })
     },
     beforeDestroy() {
-        console.log("before destroy")
-        // let tmpMesg = this.load_messages.find(m =>
-        //                         m.id === this.message.id )
         if (!this.message.with_action && this.require_action_set_true){
             this.message.with_action = true      
+            this.UPDATE_MESSAGE(this.message).then((response) =>{
+                console.log("update response", response)
+            })
+        } else if (this.actioned && !this.message.actioned_by) {
+            this.message.actioned_by = 'me'
             this.UPDATE_MESSAGE(this.message).then((response) =>{
                 console.log("update response", response)
             })
@@ -105,12 +105,9 @@ export default {
             'UPDATE_MESSAGE',
         ]),
         closeMe(){
-            if (this.actioned){
-                this.message['actioned_by'] = 'me'
-            }
             this.$emit('closeViewer', this.message)
             this.dialog = false
-        }
+        },
     }
 }
 </script>

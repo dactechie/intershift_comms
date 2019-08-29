@@ -3,7 +3,7 @@ from apis.auth.service import token_required
 from apis.admin.service import get_by_id as get_user
 from extensions import db
 from .service import (set_reader, get_all, get_by_id,
-                 delete, create,updateActionedBy, updateWithAction)
+                 delete, create, update)
 from .models import Messages
 
 mod = Blueprint('messages', __name__)
@@ -15,8 +15,10 @@ def get_all_messages(current_user):
     output = get_all()
 
     for m in output:
-        print(current_user.username)
-        m['read_by_me'] = current_user.username in m['read_by']
+        m['read_by_me'] = current_user.username in m['read_by']        
+        actioned_by_uid = m.get('actioned_by')
+        if actioned_by_uid:
+            m["actioned_by"] = get_user(actioned_by_uid).username
 
     return jsonify({'messages': output})
 
@@ -39,12 +41,13 @@ def get_one_message(current_user, message_id):
 
     result = {"title":message.title,
               "content":message.message_contents.content,
-              "created_username": created_user.username,              
+              "created_username": created_user.username,  
               "id": message.id,
               "created_date": message.created_date}
                   
     if message.actioned_by:
-        result["actioned_by"] = message.actioned_by
+        result["actioned_by"] = get_user(message.actioned_by).username
+        print("actioned by " + result["actioned_by"] )
     elif message.with_action:        
         result["with_action"] = message.with_action
 
@@ -85,16 +88,10 @@ def edit_message(current_user, message_id):
         return jsonify({'message':'No message found'})
     
     data = request.get_json()
-    print(data)
-    if data['with_action'] and not message.with_action:
-        message = updateWithAction({'with_action': data['with_action']}, message)
-        return jsonify({'message': 'the message now requires an action'})
-    
-    if data['actioned_by'] and not message.actioned_by:
-        message = updateActionedBy({'actioned_by': data['actioned_by']}, message)
-        return jsonify({'message': 'the message has been actioned'})
 
-    return jsonify({'message': 'No changes were made'})
+    response = update(current_user, data, message)
+
+    return jsonify(response)
 
 
 @mod.route('/messages/<message_id>', methods=['DELETE'])

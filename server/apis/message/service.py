@@ -33,13 +33,25 @@ def get_by_id(message_id: int) -> Messages:
     return Messages.query.get(message_id)
 
 
-def updateWithAction(changes: dict, message: Messages) -> Messages:
+def update(current_user:User, data: dict, message: Messages):
+    if data['with_action'] and not message.with_action:
+        message = _updateWithAction({'with_action': data['with_action']}, message)
+        return {'message': 'the message now requires an action'}
+    
+    if data['actioned_by'] and not message.actioned_by:
+        message = _updateActionedBy({'actioned_by': current_user.id}, message)   
+        return {'message': 'the message has been actioned'}
+
+    return {'message': 'No changes were made'}
+
+
+def _updateWithAction(changes: dict, message: Messages) -> Messages:
     message.with_action = changes['with_action']
     db.session.commit()
     return message
 
 
-def updateActionedBy(changes: dict, message: Messages) -> Messages:
+def _updateActionedBy(changes: dict, message: Messages) -> Messages:
     message.actioned_by = changes['actioned_by']
     message.actioned_date = func.now()
     db.session.commit()
@@ -56,6 +68,7 @@ def create(mesg_dict: dict, created_by_user: any) -> Messages:
 
     new_message = Messages(title=mesg_dict['title'],                                
                             created_user_id=created_by_user.id,
+                            with_action=mesg_dict['with_action'],
                             )
     new_message.readers.append(created_by_user)
 
