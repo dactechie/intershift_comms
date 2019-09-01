@@ -7,11 +7,17 @@
 
 <script lang="js">
 
-import AuthManager from '../store/modules/auth'
+import {  mapActions } from 'vuex'
+
 export default {
     mounted() {
-        AuthManager.dispatchLogout()
+        this.LOGOUT_ACTION()
         this.$router.push('/login')
+    },
+    methods:{
+        ...mapActions([
+            'LOGOUT_ACTION',
+        ]),
     }
 }
 

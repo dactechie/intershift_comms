@@ -2,8 +2,7 @@
   <v-timeline-item
         fill-dot 
         color="orange"
-        large
-        
+        large        
         >
         <template v-slot:icon>
             <span class="white--text sm-1">{{message.created_username[0]}}</span>
@@ -80,12 +79,8 @@ export default {
       }
     },
     methods: {
-        // ...mapActions([
-        //     'LOAD_MESSAGE',
-        // ]),
         showMessage() {
                 this.message['read_by_me'] ='seen'
-                this.message.read_by = 'me'
                 this.dialog = true
         },
         updateMessage(message) {
@@ -93,8 +88,7 @@ export default {
             this.message.read_by = message['read_by']
             if (message['actioned_by'] && this.message['with_action']) {
                 this.message['actioned_by'] = message['actioned_by']
-            }
-            
+            }            
         }
 
     },

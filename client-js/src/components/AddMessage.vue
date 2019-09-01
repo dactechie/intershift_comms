@@ -43,8 +43,9 @@
         <v-card-actions>
         <v-checkbox 
             v-model="message.with_action"
-            :label="`Requires Action ? ${message.with_action.toString()}`"
+            label="Check if it requires an action to be taken"
             ></v-checkbox>
+            <!-- "`Requires Action ? ${message.with_action.toString()}`" -->
           <v-spacer></v-spacer>
           <v-btn
             text
@@ -83,7 +84,9 @@ export default {
             let _this = this
             this.ADD_MESSAGE(this.message).then(() => {
                 // console.log("added message")
+                this.$emit('addedMessage')
                 _this.dialog = false
+                
             })
         }
     },

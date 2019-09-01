@@ -1,6 +1,4 @@
 <template>
-
-<!-- style="max-width: 1200px;" -->
 <v-container >
     <v-timeline :dense="$vuetify.breakpoint.smAndDown">
         <v-layout row justify-center>
@@ -9,7 +7,6 @@
             </v-flex>
         </v-layout>
     </v-timeline>
-    
 </v-container>
 </template>
 
@@ -27,7 +24,7 @@ export default {
             'load_messages',
         ]),
         messages () {
-            return this.$store.getters.load_messages            
+            return this.$store.getters.load_messages
         },
     },    
     mounted: function ()  {

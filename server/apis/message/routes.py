@@ -43,6 +43,7 @@ def get_one_message(current_user, message_id):
               "content":message.message_contents.content,
               "created_username": created_user.username,  
               "id": message.id,
+              "read_by":  [user.username for user in message.readers.all()],
               "created_date": message.created_date}
                   
     if message.actioned_by:
@@ -71,7 +72,7 @@ def create_message(current_user):
               "id": message.id,
               "created_date": message.created_date,
               "with_action": message.with_action,
-              "read_by":  created_user.username,
+              "read_by":  [created_user.username],
               "read_by_me": True,
               }
     return jsonify({'message': result}), 201

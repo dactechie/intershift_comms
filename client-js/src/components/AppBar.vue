@@ -22,7 +22,7 @@
       <v-btn icon>
         <v-icon>mdi-apps</v-icon>
       </v-btn>
-        <v-btn icon>
+        <v-btn icon to="/logout">
         <v-icon>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
