@@ -1,9 +1,13 @@
 <template>
-<v-container style="max-width: 600px;">
+
+<!-- style="max-width: 1200px;" -->
+<v-container >
     <v-timeline :dense="$vuetify.breakpoint.smAndDown">
-        
-        <MessageTItem v-for="m in messages" :message="m" :key="m.id" />
-        
+        <v-layout row justify-center>
+            <v-flex xs6>
+              <MessageTItem v-for="m in messages" :message="m" :key="m.id" />
+            </v-flex>
+        </v-layout>
     </v-timeline>
     
 </v-container>

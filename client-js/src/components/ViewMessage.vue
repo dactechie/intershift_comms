@@ -4,7 +4,7 @@
       v-model="dialog"
       width="800px"
     >
-      <v-card>
+      <v-card class="elevation-2">
         <v-card-title class="grey darken-2">
           View a shift handover note.
         </v-card-title>
@@ -81,7 +81,7 @@ export default {
                 m.id === this.message.id )
             this.content = tmpMesg.content
             if (tmpMesg['with_action']) {
-                console.log(' with action? ', tmpMesg['with_action'])
+                // console.log(' with action? ', tmpMesg['with_action'])
                 this.with_action = true
             }
         })

@@ -8,7 +8,7 @@
       right
       @click="dialog = !dialog"
     >
-      <v-icon>add</v-icon>
+      <v-icon large color="darken-2">mdi-message-text</v-icon>
 
      <v-dialog
       v-model="dialog"

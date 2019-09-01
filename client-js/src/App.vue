@@ -1,48 +1,8 @@
 <template>
    <v-app id="inspire">
 
-    <v-app-bar
-      :clipped-left="$vuetify.breakpoint.lgAndUp"
-      app
-      color="blue darken-3"
-      dark
-    >
-      <!-- <v-toolbar-title
-        style="width: 300px"
-        class="ml-0 pl-4"
-      >
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <span class="hidden-sm-and-down">Google Contacts</span>
-      </v-toolbar-title> -->
-      <v-text-field
-        flat
-        solo-inverted
-        hide-details
-        label="Search"
-        class="hidden-sm-and-down"
-      ></v-text-field>
-      <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>apps</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>notifications</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        large
-      >
-        <v-avatar
-          size="32px"
-          item
-        >
-          <v-img
-            src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
-            alt="Vuetify"
-          >
-          </v-img></v-avatar>
-      </v-btn>
-    </v-app-bar>
+    <AppBar />
+
     <v-content>
       <v-container
         class="fill-height"
@@ -64,11 +24,13 @@
 </template>
 
 <script>
+import AppBar from './components/AppBar'
 import AddMessage from './components/AddMessage';
 
 export default {
     name: 'App',
     components: {
+        AppBar,
         AddMessage,
     },
     props: {
@@ -76,8 +38,8 @@ export default {
     },
     data: () => ({
       dialog: false,
-      drawer: null,
-      items: [
+    
+      /*items: [
         { icon: 'contacts', text: 'Contacts' },
         // { icon: 'history', text: 'Frequently contacted' },
         // { icon: 'content_copy', text: 'Duplicates' },
@@ -107,7 +69,7 @@ export default {
 //         { icon: 'chat_bubble', text: 'Send feedback' },
         { icon: 'help', text: 'Help' },
                 
-      ],
+      ],*/
     }),
   }
 </script>
