@@ -29,3 +29,8 @@ Client Interface generation from sqlite DB :
 >npm i @rmp135/sql-ts knex sqlite3  --save-dev
 > ~/dev/shift_handover/client
 > tsc convert-to-ts.ts &&  node convert-to-ts.js
+
+----
+conda create --name shft python=3.7.4 --channel conda-forge
+avatar :
+https://getavataaars.com/?accessoriesType=Blank&avatarStyle=Transparent&clotheColor=Pink&clotheType=CollarSweater&eyeType=Side&eyebrowType=DefaultNatural&facialHairType=Blank&hairColor=BlondeGolden&mouthType=Tongue&skinColor=Light&topType=LongHairBob

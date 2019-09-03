@@ -5,6 +5,8 @@ import store from './store/index'
 //import VueAuthenticate from 'vue-authenticate'
 import axios from 'axios'
 import VueAxios from 'vue-axios';
+import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
+import 'tiptap-vuetify/dist/main.css'
 import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
@@ -34,6 +36,10 @@ baseAxios.interceptors.response.use(function (response) {
 
 Vue.use(VueAxios, baseAxios)
 
+Vue.use(TiptapVuetifyPlugin, {
+  // optional, default to 'md' (default vuetify icons before v2.0.0)
+  iconsGroup: 'md'
+})
 
 
 new Vue({
