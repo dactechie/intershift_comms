@@ -7,8 +7,10 @@ export default  {
         try {
             const response = await Vue.axios.post('/auth/login', creds)
             console.log(response)
-            commit('setLoggedInUser', { user: creds.username })
+            //commit('setLoggedInUser', { user: creds.username })
             localStorage.setItem('token', response.data.token)
+            localStorage.setItem('user', JSON.stringify(response.data.user))
+            commit('setLoggedInUser', { user: response.data.user })
 
         } catch(err) {
             console.error(err)
@@ -19,6 +21,7 @@ export default  {
         
         commit('setLoggedInUser', { user: null })
         localStorage.removeItem('token')
+        localStorage.removeItem('user')
     },
 
 }

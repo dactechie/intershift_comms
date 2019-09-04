@@ -1,9 +1,9 @@
 <template>
 
     <div class="caption">Read by:
-        <v-chip :class="` ${item} white--text caption `" small v-for="(item, index) in read_by_list"  :key=index>
+        <v-chip :class="` ${item.color} white--text caption `" small v-for="(item, index) in read_by_list"  :key=index>
             <!-- <v-icon>{{icons[index]}}</v-icon> -->
-            {{item}}
+            {{item.initials}}
         </v-chip>
     </div>
 </template>
@@ -19,13 +19,3 @@ export default {
     }),
 }
 </script>
-<style lang="stylus" scoped>
-.theme--light.v-chip.steve:not(.v-chip--active)  {
-    background-color:tomato;
-
-}
-.theme--light.v-chip.aftab:not(.v-chip--active)  {
-    background-color: lightblue ;
-
-}
-</style>

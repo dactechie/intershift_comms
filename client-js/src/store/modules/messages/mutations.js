@@ -15,7 +15,7 @@ export const mutations = {
     state.messages.splice(state.messages.indexOf(message), 1)
   },
 
-  editMessage (state,  message ) {
+  editMessage (state,  message) {
     var index = state.messages.findIndex (m=> m.id === message.id);
     if (index !== -1) {
         state.messages[index] = message;

@@ -22,7 +22,7 @@ class Users(db.Model):
     __tablename__  = 'Users'
     id = db.Column(db.Integer, primary_key=True)
     public_id = db.Column(db.String(50), unique=True)
-    username = db.Column(db.String(20))
+    username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(80))
     admin = db.Column(db.Boolean, default=False)
     # created_messages = db.relationship('Message', backref='user',

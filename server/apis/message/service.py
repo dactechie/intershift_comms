@@ -1,9 +1,12 @@
+from datetime import timedelta, datetime
 from extensions import db
 from typing import List
 from sqlalchemy import desc
 from sqlalchemy.sql import func
 from apis.auth.models import User
 from .models import Messages, MessageContents
+from settings import GETALL_MESSAGES_SINCE_DAYS
+
 #from .interface import MessageInterface
 
 
@@ -15,16 +18,29 @@ def set_reader(message: Messages, user: User):
 
 
 def get_all() -> List[object]:
-    messages = Messages.query.order_by(desc(Messages.created_date)).all()
-    users = User.query.all()
+    messages = Messages.query.filter(
+                Messages.created_date >=
+                (datetime.now() - timedelta(days=GETALL_MESSAGES_SINCE_DAYS))
+                ).order_by(desc(Messages.created_date))
+
+    users = User.query.all() # TODO : get by created user id
 
     return [{ "id": message.id,
             "title": message.title,
             "created_date": message.created_date,
             "with_action": message.with_action,
             "actioned_by": message.actioned_by,
-            "created_username": [user.username for user in users if user.id == message.created_user_id],
-            "read_by": [user.username for user in message.readers.all()]
+            "created_user": [{
+                              'username': user.username,
+                              'color': user.color,
+                              'initials': user.initials}
+                              for user in users
+                              if user.id == message.created_user_id][0],
+            "read_by": [{
+                              'username': user.username,
+                              'color': user.color,
+                              'initials': user.initials}
+                        for user in message.readers.all()]
             } 
             for message in messages]
 

@@ -1,7 +1,7 @@
 
 
 from flask import Blueprint, jsonify, request, make_response
-from apis.admin.service import get_by_username
+from apis.users.service import get_by_username
 from .service import get_token_ifok, token_required
 import json
 
@@ -39,7 +39,14 @@ def login():
     
     decoded_token = get_token_ifok(user, auth['password'])
     if decoded_token:
-        return jsonify({'token': decoded_token})
+        u = {
+            'username' : user.username,
+            'initials': user.initials,
+            'public_id': user.public_id,
+            'admin': user.admin,
+            'color':user.color
+        }
+        return jsonify({'token': decoded_token, 'user': u})
 
     return _unableToLogin()
 

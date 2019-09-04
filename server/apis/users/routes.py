@@ -2,10 +2,10 @@ from flask import Blueprint, jsonify, request
 from ..auth.service import token_required
 from .service import get_all, create, get_by_public_id, update, delete
 
-mod = Blueprint('admin', __name__)
+mod = Blueprint('users', __name__)
 
 
-@mod.route('/admin', methods=['GET'])
+@mod.route('/users', methods=['GET'])
 @token_required
 def get_all_users(current_user):
     if not current_user.admin:
@@ -20,7 +20,7 @@ def get_all_users(current_user):
     return jsonify({'users': output})
 
 
-@mod.route('/admin/<public_id>', methods=['GET'])
+@mod.route('/users/<public_id>', methods=['GET'])
 @token_required
 def get_one_user(current_user, public_id):
     if not current_user.admin:
@@ -37,7 +37,7 @@ def get_one_user(current_user, public_id):
     return jsonify({'user': result})
 
 
-@mod.route('/admin', methods=['POST'])
+@mod.route('/users', methods=['POST'])
 #@token_required
 def create_user(): #current_user):
     # if not current_user.admin:
@@ -49,7 +49,7 @@ def create_user(): #current_user):
     return jsonify({'message' : f'New user creatd! public id: {user.public_id}'})
 
 
-@mod.route('/admin/<public_id>', methods=['PUT'])
+@mod.route('/users/<public_id>', methods=['PUT'])
 @token_required
 def promote_user(current_user, public_id):
     if not current_user.admin:
@@ -64,7 +64,7 @@ def promote_user(current_user, public_id):
     return jsonify({'message': 'the user has been promoted'})
 
 
-@mod.route('/admin/<public_id>', methods=['DELETE'])
+@mod.route('/users/<public_id>', methods=['DELETE'])
 @token_required
 def delete_user(current_user, public_id):
     if not current_user.admin:

@@ -19,6 +19,7 @@
         class="hidden-sm-and-down"
       ></v-text-field>
       <v-spacer></v-spacer>
+      <a :href="admin_url">ADMIN</a>
       <v-btn icon>
         <v-icon>mdi-apps</v-icon>
       </v-btn>
@@ -27,3 +28,14 @@
       </v-btn>
     </v-app-bar>
 </template>
+
+<script>
+
+import {ADMIN_URL} from '@/constants'
+
+export default {
+    data: ()=>({
+        admin_url: ADMIN_URL,
+    }),
+}
+</script>

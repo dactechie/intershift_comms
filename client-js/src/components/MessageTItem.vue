@@ -1,12 +1,16 @@
 <template>
   <v-timeline-item
         fill-dot 
-        color="orange"
-        large        
+        v-bind:color="message.created_user.color"
+        large
         >
-        <template v-slot:icon>
-            <span class="white--text sm-1">{{message.created_username[0]}}</span>
-        </template>
+        <!-- <template v-slot:icon>
+            <span class="white--text sm-1">{{message.created_user.username}}</span>
+        </template> -->
+        <v-avatar slot="icon">
+          <img ref="avatar" 
+                :alt="message.created_user.username"/>
+        </v-avatar>
 
         <v-container >
         <v-card  class="mx-auto"  >
@@ -56,7 +60,8 @@
 import ViewMessage from './ViewMessage'
 import ReadByUserBadges from './ReadByUserBadges'
 import { friendlyDate } from '../filters/date-formatters'
-//import { mapActions } from 'vuex'
+
+import { mapGetters } from 'vuex'
 
 export default {
     components:{
@@ -74,12 +79,22 @@ export default {
         value: true,
     }),
     computed: {
+        ...mapGetters([
+            'getLoggedInUser',
+        ]),
       seenByMe() {
          return this.message['read_by_me'] ? 'seen' : 'new';
       }
     },
+    mounted() {
+        this.$refs.avatar.src = require('../assets/' + this.message.created_user.username + '.svg')
+        this.$refs.avatar.title =  this.message.created_user.initials
+    },
     methods: {
         showMessage() {
+                if (!this.message.read_by.some( (el)=> el.username === this.getLoggedInUser.username)) {
+                    this.message.read_by.push(this.getLoggedInUser)
+                }
                 this.message['read_by_me'] ='seen'
                 this.dialog = true
         },
@@ -89,8 +104,7 @@ export default {
             if (message['actioned_by'] && this.message['with_action']) {
                 this.message['actioned_by'] = message['actioned_by']
             }            
-        }
-
+        },
     },
   }
 </script>

@@ -6,7 +6,7 @@ export default {
       try {
          Vue.axios.defaults.headers.common['Authorization'] =
                                      'Bearer ' + localStorage.getItem('token');
-        const response = await  Vue.axios.post('/messages', message)
+        const response = await  Vue.axios.post('/messags', message)
 
         let result = response.data.message
         // console.log("going to commit ", result)
@@ -25,7 +25,7 @@ export default {
         try {
             Vue.axios.defaults.headers.common['Authorization'] =
                                          'Bearer ' + localStorage.getItem('token');
-            const response = await  Vue.axios.put('/messages/'+ message.id, message)
+            const response = await  Vue.axios.put('/messags/'+ message.id, message)
             console.log("update response", response)
     
         } catch(err){
@@ -38,7 +38,7 @@ export default {
         try {
             Vue.axios.defaults.headers.common['Authorization'] =
                                        'Bearer ' + localStorage.getItem('token');
-            const response = await  Vue.axios.get('/messages');        
+            const response = await  Vue.axios.get('/messags');        
           // console.log("going to commit updateMessages", response.data.messages)
           
           commit('updateMessages', response.data.messages)
@@ -53,7 +53,7 @@ export default {
             Vue.axios.defaults.headers.common['Authorization'] =
                                        'Bearer ' + localStorage.getItem('token');
           
-            const response = await  Vue.axios.get('/messages/'+message_id);         
+            const response = await  Vue.axios.get('/messags/'+message_id);         
 
             commit('setContent', response.data.message)
         } catch(err){

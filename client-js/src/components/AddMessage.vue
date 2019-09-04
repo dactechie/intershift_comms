@@ -81,6 +81,16 @@ export default {
             'ADD_MESSAGE',
         ]),
         addMessage: function () {
+            this.message.title = this.message.title.replace(/[^\w\s]/gi, '').trim()
+            if (this.message.title.length <1) {
+                alert("Must have a title")
+                return;
+            }
+            this.message.content = this.message.content.replace(/[^\w\s]/gi, '').trim()
+            if (this.message.content.length < 5) {
+                alert("The message must be more than 5 characters")
+                return;
+            }
             let _this = this
             this.ADD_MESSAGE(this.message).then(() => {
                 // console.log("added message")
