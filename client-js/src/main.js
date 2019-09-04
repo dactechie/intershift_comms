@@ -10,18 +10,11 @@ import {API_URL} from './constants'
 
 Vue.config.productionTip = false
 
-
-// Vue.axios.defaults.baseURL = 'http://127.0.0.1:5000'
 const baseAxios = axios.create({
   baseURL: API_URL
 })
 
 
-// Vue.prototype.$http = baseAxios
-
-// Vue.use(VueAuthenticate, {
-//   baseUrl: 'http://localhost:5000', // Your API domain
-// });
 baseAxios.interceptors.response.use(function (response) {
     return response
   }, 
@@ -34,8 +27,6 @@ baseAxios.interceptors.response.use(function (response) {
   })
 
 Vue.use(VueAxios, baseAxios)
-
-
 
 new Vue({
   router,

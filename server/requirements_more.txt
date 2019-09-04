@@ -33,3 +33,8 @@ Client Interface generation from sqlite DB :
 /c/sqlite/sqlite3 handover.db
 .tables
 .schema
+
+-------
+conda create --name shft python=3.7.4 --channel conda-forge
+avatar :
+https://getavataaars.com/?accessoriesType=Blank&avatarStyle=Transparent&clotheColor=Pink&clotheType=CollarSweater&eyeType=Side&eyebrowType=DefaultNatural&facialHairType=Blank&hairColor=BlondeGolden&mouthType=Tongue&skinColor=Light&topType=LongHairBob
