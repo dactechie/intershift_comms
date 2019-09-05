@@ -19,13 +19,9 @@
           </v-row>
           <v-row>
             <v-col>
-              <v-textarea
-                v-model="content"
-                :readonly="true"               
-                full-width
-                outlined
-                label="Notes"
-              ></v-textarea>
+               <p v-html="content">
+                    {{content}}
+                </p>
             </v-col>
           </v-row>
         </v-container>

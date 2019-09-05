@@ -29,14 +29,7 @@
           </v-row>
           <v-row>
             <v-col>
-              <v-textarea
-                v-model="message.content"
-                auto-grow
-                full-width
-                outlined
-                label="Notes"
-                placeholder="Notes"
-              ></v-textarea>
+                <RichTextEditor v-model="message.content"  :value="message.content"/>
             </v-col>
           </v-row>
         </v-container>
@@ -65,8 +58,12 @@
 <script>
 
 import { mapActions } from 'vuex'
+import RichTextEditor from '@/components/RichTextEditor'
 
 export default {
+    components:{
+        RichTextEditor,
+    },
     data: () => ({
       dialog: false,
       
@@ -86,7 +83,7 @@ export default {
                 alert("Must have a title")
                 return;
             }
-            this.message.content = this.message.content.replace(/[^\w\s]/gi, '').trim()
+            this.message.content = this.message.content.trim()
             if (this.message.content.length < 5) {
                 alert("The message must be more than 5 characters")
                 return;
