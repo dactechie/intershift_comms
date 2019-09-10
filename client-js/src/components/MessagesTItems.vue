@@ -3,7 +3,11 @@
     <v-timeline :dense="$vuetify.breakpoint.smAndDown">
         <v-layout row justify-center>
             <v-flex xs6>
+                <v-slide-x-transition
+                    group
+                >
               <MessageTItem v-for="m in messages" :message="m" :key="m.id" />
+                </v-slide-x-transition>
             </v-flex>
         </v-layout>
     </v-timeline>

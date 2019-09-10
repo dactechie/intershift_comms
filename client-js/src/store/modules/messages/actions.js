@@ -17,10 +17,6 @@ export default {
       }      
     },
   
-    removeMessage ({ commit }, message) {
-      commit('removeMessage', message)
-    },
-  
     UPDATE_MESSAGE : async function editMessages ({ commit }, message) {
         try {
             Vue.axios.defaults.headers.common['Authorization'] =

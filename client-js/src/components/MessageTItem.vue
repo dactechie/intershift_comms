@@ -87,7 +87,7 @@ export default {
       }
     },
     mounted() {
-        this.$refs.avatar.src = require('../assets/' + this.message.created_user.username + '.svg')
+        this.$refs.avatar.src = require('../assets/images/avatars/' + this.message.created_user.username + '.svg')
         this.$refs.avatar.title =  this.message.created_user.initials
     },
     methods: {

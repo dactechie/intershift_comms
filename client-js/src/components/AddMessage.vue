@@ -12,7 +12,7 @@
 
      <v-dialog
       v-model="dialog"
-      width="800px"
+      width="1000px"
     >
       <v-card>
         <v-card-title class="grey darken-2">
