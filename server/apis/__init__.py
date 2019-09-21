@@ -1,3 +1,4 @@
+import urllib.parse
 from flask import Flask, jsonify #, url_for
 from flask_cors import CORS
 from extensions import db
@@ -24,7 +25,10 @@ def create_app(config_file='../settings.py'):
     app = Flask(__name__)
     # app.config.from_object(config_by_name[env or 'test'])
     app.config.from_pyfile(config_file)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///handover.db'
+    
+    params = urllib.parse.quote_plus("DRIVER={ODBC Driver 17 for SQL Server};Server=tcp:hndserver.database.windows.net,1433;Database=hnd;Uid=mj@hndserver;Pwd=Hitmail1;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % params
+
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     app.config['SECRET_KEY'] ='mysecret'
