@@ -11,14 +11,14 @@
       >
         <span class="hidden-sm-and-down">Arcadia Handover notes</span>
       </v-toolbar-title>
-      <SearchBar/>
-      <!-- <v-text-field
+      <!-- <SearchBar/> -->
+      <v-text-field
         flat
         solo-inverted
         hide-details
         label="Search"
         class="hidden-sm-and-down"
-      ></v-text-field> -->
+      ></v-text-field>
       <v-spacer></v-spacer>
       <a :href="admin_url">ADMIN</a>
       <v-btn icon>
@@ -33,11 +33,11 @@
 <script>
 
 import {ADMIN_URL} from '@/constants'
-import SearchBar from '@/components/SearchBar'
+// import SearchBar from '@/components/SearchBar'
 
 export default {
     components: {
-        SearchBar,
+        // SearchBar,
     },
     data: ()=>({
         admin_url: ADMIN_URL,

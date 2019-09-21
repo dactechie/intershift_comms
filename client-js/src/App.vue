@@ -1,7 +1,8 @@
 <template>
    <v-app id="inspire">
 
-    <AppBar />
+    
+    <AppBar  v-if="this.$route.path !== '/login'"/>
 
     <v-content>
       <v-container
@@ -48,5 +49,8 @@ export default {
       dialog: false,
       showSuccess: false,
     }),
+    // mounted() {
+    //     console.log(this.$route.path)
+    // }
   }
 </script>

@@ -12,9 +12,10 @@
 
      <v-dialog
       v-model="dialog"
-      width="1000px"
+      width="1200px"
     >
-      <v-card>
+    
+      <v-card outlined>
         <v-card-title class="grey darken-2">
           Create a shift handover note.
         </v-card-title>
@@ -99,3 +100,10 @@ export default {
     },
 }
 </script>
+<style lang="scss" scoped>
+   @import '@/assets/sass/main.scss';
+   @import '@/assets/sass/editor.scss';
+   @import '@/assets/sass/menubar.scss';
+   
+
+</style>
