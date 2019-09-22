@@ -1,29 +1,5 @@
 <template>
     <div>
-        <h1>Login</h1>
-        <hr/>
-            <!-- <tr>
-                <td></td>
-                <td><label><input v-model="data.rememberMe" type="checkbox" /> Remember Me</label></td>
-            </tr> -->
-<!-- <div v-show="error" style="color:red; word-wrap:break-word;">{{ error | json }}</div> -->
-        <!-- <form @submit.prevent="login()">
-            <table><tr>
-                <td>Email:</td>
-                <td><input v-model="email" /></td>
-            </tr><tr>
-                <td>Password:</td>
-                <td><input v-model="password" type="password" /></td>
-            </tr>
-
-            <tr>
-                <td></td>
-                <td><button type="submit">Login</button></td>
-            </tr></table>
-
-            <hr/> 
-            
-        </form> -->
 
 <form @submit.prevent="login()">
 	<div class="svgContainer">
@@ -125,25 +101,21 @@
 					</g>				
 				</g>
 				
-				
-
-				
 			</svg>
 		</div>
 	</div>
 	
 	<div class="inputGroup inputGroup1">
-	 <label for="loginEmail" id="loginEmailLabel">firstname.lastname</label>
-		<input  id="loginEmail" type="text" class="email"  maxlength="254" />
-        <!-- v-model="email.value"  -->
+	<label for="loginEmail" id="loginEmailLabel">Username</label>
+		<input  id="loginEmail" type="text" class="email" required maxlength="254" />
 		<p class="helper helper1">firstname.lastname</p>
 	</div>
 	<div class="inputGroup inputGroup2">
 		<label for="loginPassword" id="loginPasswordLabel">Password</label>
-		<input type="password" id="loginPassword"  />
+		<input type="password" id="loginPassword"  required />
          <!-- v-model="password.value" -->
-		<label id="showPasswordToggle" for="showPasswordCheck">Show
-			<input id="showPasswordCheck" type="checkbox"/>
+		<label id="showPasswordToggle" for="showPasswordCheck">Show &nbsp;&nbsp;
+            <input id="showPasswordCheck" type="checkbox"/>
 			<div class="indicator"></div>
 		</label>
 	</div>
@@ -152,132 +124,95 @@
 	</div>	
 </form>
 
-
-
     </div>
 </template>
 
-<script lang="js">
+<script lang="js" scoped>
 import {TweenMax, Power1, Power2,  Expo} from "gsap/TweenMax";
 
-//import {MorphSVG } from '@/plugins/MorphSVGPlugin.min';
 export default {
 
     data() {
         return {
-            //email : '',
-            //password : '',
-            context : 'login context',
-            error : null,
+            context : 'login context',error : null,
             emailLabel:null, email :null, 
             passwordLabel :null, password :null, 
             showPasswordCheck :null, showPasswordToggle :null,
-             mySVG :null, twoFingers :null, 
-             armL :null, armR :null, 
-             eyeL :null, eyeR :null, 
-             nose :null, mouth :null, 
-             mouthBG :null, mouthSmallBG :null,
-              mouthMediumBG :null, mouthLargeBG :null,
-               mouthMaskPath :null, mouthOutline :null, 
-               tooth :null, tongue :null, chin :null, 
-               face :null, eyebrow :null, outerEarL :null,
-                outerEarR :null, earHairL :null, 
-                earHairR :null, hair :null, 
-                bodyBG :null, bodyBGchanged :null,
+            mySVG :null, twoFingers :null, armL :null, armR :null, 
+            eyeL :null, eyeR :null, nose :null, mouth :null, 
+            mouthBG :null, mouthSmallBG :null,
+            mouthMediumBG :null, mouthLargeBG :null,
+            mouthMaskPath :null, mouthOutline :null, 
+            tooth :null, tongue :null, chin :null, 
+            face :null, eyebrow :null, outerEarL :null,
+            outerEarR :null, earHairL :null, 
+            earHairR :null, hair :null, bodyBG :null, bodyBGchanged :null,
 
-            activeElement : null, curEmailIndex : null, screenCenter : null, svgCoords : null, 
-            emailCoords : null, emailScrollMax: null, chinMin : .5, dFromC: null,
-            mouthStatus :  "small", blinking : null, eyeScale :  1, eyesCovered :  false, showPasswordClicked :  false,
-            eyeLCoords : null,  eyeRCoords : null,  noseCoords : null,  mouthCoords : null,  eyeLAngle : null,
-            eyeLX : null,  eyeLY : null,  eyeRAngle : null,  eyeRX : null,  eyeRY : null,  noseAngle : null,  noseX : null,  noseY : null, 
-            mouthAngle : null,  mouthX : null,  mouthY : null,  mouthR : null,  chinX : null,  chinY : null, 
-            chinS : null,  faceX : null,  faceY : null,  faceSkew : null,  eyebrowSkew : null,  outerEarX : null,  outerEarY : null,  hairX : null,
-              hairS : null, 
+            activeElement : null, curEmailIndex : null, screenCenter : null, 
+            svgCoords : null, emailCoords : null, emailScrollMax: null, chinMin : .5,
+            dFromC: null, mouthStatus: "small", blinking : null, eyeScale: 1,
+            eyesCovered :  false, showPasswordClicked:  false, eyeLCoords: null,
+            eyeRCoords : null,  noseCoords : null,  mouthCoords : null,  eyeLAngle : null,
+            eyeLX : null,  eyeLY : null,  eyeRAngle : null,  eyeRX : null,  eyeRY : null,
+            noseAngle : null,  noseX : null,  noseY : null, mouthAngle : null,
+            mouthX : null,  mouthY : null,  mouthR : null, chinX : null,  chinY : null, 
+            chinS : null,  faceX : null,  faceY : null,  faceSkew : null,  
+            eyebrowSkew : null, outerEarX : null, outerEarY : null, hairX : null,
+            hairS : null, dummyCheck : false
         }
     },
     mounted() {
-                    //console.log(document.querySelector('#loginEmail'))
-
-
-            this.emailLabel= document.querySelector('#loginEmailLabel'), //this.email=document.querySelector('#loginEmail'), 
-            this.passwordLabel=document.querySelector('#loginPasswordLabel'), //this.password=document.querySelector('#loginPassword'), 
+            this.emailLabel= document.querySelector('#loginEmailLabel'), this.email=document.querySelector('#loginEmail'), 
+            this.passwordLabel=document.querySelector('#loginPasswordLabel'), this.password=document.querySelector('#loginPassword'), 
             this.showPasswordCheck=document.querySelector('#showPasswordCheck'), this.showPasswordToggle=document.querySelector('#showPasswordToggle'),
-            this. mySVG=document.querySelector('.svgContainer'), this.twoFingers=document.querySelector('.twoFingers'), 
-            this. armL=document.querySelector('.armL'), this.armR=document.querySelector('.armR'), 
-           this.  eyeL=document.querySelector('.eyeL'), this.eyeR=document.querySelector('.eyeR'), 
-           this.  nose=document.querySelector('.nose'), this.mouth=document.querySelector('.mouth'), 
-           this.  mouthBG=document.querySelector('.mouthBG'), this.mouthSmallBG=document.querySelector('.mouthSmallBG'),
-           this.   mouthMediumBG=document.querySelector('.mouthMediumBG'), this.mouthLargeBG=document.querySelector('.mouthLargeBG'),
-            this.   mouthMaskPath=document.querySelector('#mouthMaskPath'), this.mouthOutline=document.querySelector('.mouthOutline'), 
-           this.    tooth=document.querySelector('.tooth'), this.tongue=document.querySelector('.tongue'), this.chin=document.querySelector('.chin'), 
-            this.   face=document.querySelector('.face'), this.eyebrow=document.querySelector('.eyebrow'), this.outerEarL=document.querySelector('.earL .outerEar'),
-           this.     outerEarR=document.querySelector('.earR .outerEar'), this.earHairL=document.querySelector('.earL .earHair'), 
-            this.    earHairR=document.querySelector('.earR .earHair'), this.hair=document.querySelector('.hair'), 
-           this.     bodyBG=document.querySelector('.bodyBGnormal'), this.bodyBGchanged=document.querySelector('.bodyBGchanged'),
-            
+            this.mySVG=document.querySelector('.svgContainer'), this.twoFingers=document.querySelector('.twoFingers'), 
+            this.armL=document.querySelector('.armL'), this.armR=document.querySelector('.armR'), 
+            this.eyeL=document.querySelector('.eyeL'), this.eyeR=document.querySelector('.eyeR'), 
+            this.nose=document.querySelector('.nose'), this.mouth=document.querySelector('.mouth'), 
+            this.mouthBG=document.querySelector('.mouthBG'), this.mouthSmallBG=document.querySelector('.mouthSmallBG'),
+            this.mouthMediumBG=document.querySelector('.mouthMediumBG'), this.mouthLargeBG=document.querySelector('.mouthLargeBG'),
+            this.mouthMaskPath=document.querySelector('#mouthMaskPath'), this.mouthOutline=document.querySelector('.mouthOutline'), 
+            this.tooth=document.querySelector('.tooth'), this.tongue=document.querySelector('.tongue'), this.chin=document.querySelector('.chin'), 
+            this.face=document.querySelector('.face'), this.eyebrow=document.querySelector('.eyebrow'), this.outerEarL=document.querySelector('.earL .outerEar'),
+            this.outerEarR=document.querySelector('.earR .outerEar'), this.earHairL=document.querySelector('.earL .earHair'), 
+            this.earHairR=document.querySelector('.earR .earHair'), this.hair=document.querySelector('.hair'), 
+            this.bodyBG=document.querySelector('.bodyBGnormal'), this.bodyBGchanged=document.querySelector('.bodyBGchanged'),
+
             this.initLoginForm();
     },
-    // updated() {
-    //     console.log(document.querySelector('#loginEmail'))
-    //     this.$nextTick(() => {
-            
-    //                 console.log(document.querySelector('#loginEmail'))
-    //         this.emailLabel= this.$el.querySelector('#loginEmailLabel'), //this.email=this.$el.querySelector('#loginEmail'), 
-    //         this.passwordLabel=this.$el.querySelector('#loginPasswordLabel'), //this.password=this.$el.querySelector('#loginPassword'), 
-    //         this.showPasswordCheck=this.$el.querySelector('#showPasswordCheck'), this.showPasswordToggle=this.$el.querySelector('#showPasswordToggle'),
-    //         this. mySVG=this.$el.querySelector('.svgContainer'), this.twoFingers=this.$el.querySelector('.twoFingers'), 
-    //         this. armL=this.$el.querySelector('.armL'), this.armR=this.$el.querySelector('.armR'), 
-    //        this.  eyeL=this.$el.querySelector('.eyeL'), this.eyeR=this.$el.querySelector('.eyeR'), 
-    //        this.  nose=this.$el.querySelector('.nose'), this.mouth=this.$el.querySelector('.mouth'), 
-    //        this.  mouthBG=this.$el.querySelector('.mouthBG'), this.mouthSmallBG=this.$el.querySelector('.mouthSmallBG'),
-    //        this.   mouthMediumBG=this.$el.querySelector('.mouthMediumBG'), this.mouthLargeBG=this.$el.querySelector('.mouthLargeBG'),
-    //         this.   mouthMaskPath=this.$el.querySelector('#mouthMaskPath'), this.mouthOutline=this.$el.querySelector('.mouthOutline'), 
-    //        this.    tooth=this.$el.querySelector('.tooth'), this.tongue=this.$el.querySelector('.tongue'), this.chin=this.$el.querySelector('.chin'), 
-    //         this.   face=this.$el.querySelector('.face'), this.eyebrow=this.$el.querySelector('.eyebrow'), this.outerEarL=this.$el.querySelector('.earL .outerEar'),
-    //        this.     outerEarR=this.$el.querySelector('.earR .outerEar'), this.earHairL=this.$el.querySelector('.earL .earHair'), 
-    //         this.    earHairR=this.$el.querySelector('.earR .earHair'), this.hair=this.$el.querySelector('.hair'), 
-    //        this.     bodyBG=this.$el.querySelector('.bodyBGnormal'), this.bodyBGchanged=this.$el.querySelector('.bodyBGchanged'),
-            
-    //         this.initLoginForm();
-    //     })
-    // },
-
     methods: {
 
-        login: function() {
+        login: function() {            
             this.$store.dispatch('LOGIN_ACTION', {
-                username: this.$el.querySelector('#loginEmail').value , // this.email.value,
-                password: this.$el.querySelector('#loginPassword').value, 
+                username: this.email.value ,
+                password: this.password.value, 
             }).then(() => {
                 this.$router.push('/')
             })
         },
 
-     
-        calculateFaceMove: function(e) {
-          
-
+        calculateFaceMove: function() {
             var 	
-                carPos = this.$el.querySelector('#loginEmail').selectionEnd,
+                carPos = this.email.value.selectionEnd,
                 div = document.createElement('div'),
                 span = document.createElement('span'),
-                copyStyle = getComputedStyle(this.$el.querySelector('#loginEmail')),
+                copyStyle = getComputedStyle(this.email),
                 caretCoords = {}
             ;
             if(carPos == null || carPos == 0) {
                 // if browser doesn't support 'selectionEnd' property on input[type="email"], use 'value.length' property instead
-                carPos = this.$el.querySelector('#loginEmail').value.length;
+                carPos = this.email.value.length;
             }
             [].forEach.call(copyStyle, function(prop){
                 div.style[prop] = copyStyle[prop];
             });
             div.style.position = 'absolute';
             document.body.appendChild(div);
-            div.textContent = this.$el.querySelector('#loginEmail').value.substr(0, carPos);
-            span.textContent = this.$el.querySelector('#loginEmail').value.substr(carPos) || '.';
+            div.textContent = this.email.value.substr(0, carPos);
+            span.textContent = this.email.value.substr(carPos) || '.';
             div.appendChild(span);
             
-            if(this.$el.querySelector('#loginEmail').scrollWidth <= this.emailScrollMax ) {
+            if(this.email.scrollWidth <= this.emailScrollMax ) {
                 caretCoords = this.getPosition(span);
                 this.dFromC  = this.screenCenter - (caretCoords.x + this.emailCoords.x);
                 this.eyeLAngle = this.getAngle(this.eyeLCoords.x, this.eyeLCoords.y, this.emailCoords.x + caretCoords.x, this.emailCoords.y + 25);
@@ -336,7 +271,7 @@ export default {
 
         onEmailInput: function (e) {
             this.calculateFaceMove(e);
-            var value = this.$el.querySelector('#loginEmail').value;
+            var value = this.email.value;
             this.curEmailIndex = value.length;
             
             // very crude email validation to trigger effects
@@ -377,7 +312,7 @@ export default {
         onEmailFocus: function (e) {
             this.activeElement = "email";
             e.target.parentElement.classList.add("focusWithText");
-            //stopthis_blinking();
+            //this.stopthis_blinking();
             //calculateFaceMove();
             this.onEmailInput();
         },
@@ -397,18 +332,18 @@ export default {
             }, 100);
         },
 
-        onEmailLabelClick: function (e) {
+        onEmailLabelClick: function () {
             this.activeElement = "email";
         },
 
-        onPasswordFocus: function (e) {
+        onPasswordFocus: function () {
             this.activeElement = "password";
             if(!this.eyesCovered) {
                 this.coverEyes();
             }
         },
 
-        onPasswordBlur: function (e) {
+        onPasswordBlur: function () {
             this.activeElement = null;
             let that = this;
             setTimeout(function() {
@@ -419,14 +354,14 @@ export default {
             }, 100);
         },
 
-        onPasswordToggleFocus: function (e) {
+        onPasswordToggleFocus: function () {
             this.activeElement = "toggle";
             if(!this.eyesCovered) {
                 this.coverEyes();
             }
         },
 
-        onPasswordToggleBlur: function (e) {
+        onPasswordToggleBlur: function () {
             this.activeElement = null;
             if(!this.showPasswordClicked) {
                 let that = this;
@@ -439,11 +374,11 @@ export default {
             }
         },
 
-        onPasswordToggleMouseDown: function (e) {
+        onPasswordToggleMouseDown: function () {
             this.showPasswordClicked = true;
         },
 
-        onPasswordToggleMouseUp: function (e) {
+        onPasswordToggleMouseUp: function () {
             this.showPasswordClicked = false;
         },
 
@@ -452,19 +387,18 @@ export default {
             setTimeout(function() {
                 // if checkbox is checked, show password
                 if(e.target.checked) {
-                    that.$el.querySelector('#loginPassword').type = "text";
+                    that.password.type = "text";
                     that.spreadFingers();
 
                 // if checkbox is off, hide password
                 } else {
-                    that.$el.querySelector('#loginPassword').type = "password";
+                    that.password.type = "password";
                     that.closeFingers();
                 }	
             }, 100);
         },
 
         onPasswordToggleClick: function (e) {
-            //console.log("click: " + e.target.id);
             e.target.focus();
         },
 
@@ -518,8 +452,6 @@ export default {
                        that.startthis_blinking(12);
                 }});
             }, 100)
-          
-  
         },
 
         stopthis_blinking: function () {
@@ -574,7 +506,7 @@ export default {
         initLoginForm: function () {
             // some measurements for the svg's elements
             this.svgCoords = this.getPosition(this.mySVG);
-            this.emailCoords = this.getPosition(this.$el.querySelector('#loginEmail'));
+            this.emailCoords = this.getPosition(this.email);
             this.screenCenter = this.svgCoords.x + (300/ 2);//this.mySVG.offsetWidth 
             this.eyeLCoords = {x: this.svgCoords.x + 84, y: this.svgCoords.y + 76};
             this.eyeRCoords = {x: this.svgCoords.x + 113, y: this.svgCoords.y + 76};
@@ -582,14 +514,14 @@ export default {
             this.mouthCoords = {x: this.svgCoords.x + 100, y: this.svgCoords.y + 100};
             
             // handle events for email input
-            this.$el.querySelector('#loginEmail').addEventListener('focus', this.onEmailFocus);
-            this.$el.querySelector('#loginEmail').addEventListener('blur', this.onEmailBlur);
-            this.$el.querySelector('#loginEmail').addEventListener('input', this.onEmailInput);
+            this.email.addEventListener('focus', this.onEmailFocus);
+            this.email.addEventListener('blur', this.onEmailBlur);
+            this.email.addEventListener('input', this.onEmailInput);
             this.emailLabel.addEventListener('click', this.onEmailLabelClick);
             
             // handle events for password input
-            this.$el.querySelector('#loginPassword').addEventListener('focus', this.onPasswordFocus);
-            this.$el.querySelector('#loginPassword').addEventListener('blur', this.onPasswordBlur);
+            this.password.addEventListener('focus', this.onPasswordFocus);
+            this.password.addEventListener('blur', this.onPasswordBlur);
             //passwordLabel.addEventListener('click', onPasswordLabelClick);
             
             // handle events for password checkbox
@@ -612,7 +544,7 @@ export default {
             
             // determine how far email input can go before scrolling occurs
             // will be used as the furthest point avatar will look to the right
-            this.emailScrollMax = this.$el.querySelector('#loginPassword').scrollWidth;
+            this.emailScrollMax = this.password.scrollWidth;
             
             // check if we're on mobile/tablet, if so then show password initially
             // if(isMobileDevice()) {
@@ -724,8 +656,15 @@ form {
 		}
 		input[type="text"] {
 			padding: .025em 1em 0;
-		}
-		#this.showPasswordToggle {
+        }
+        input[type=checkbox]
+        {
+        /* Double-sized Checkboxes */
+
+        -moz-transform: scale(2); /* FF */
+        -webkit-transform: scale(2);
+        }
+                #this.showPasswordToggle {
 			display: block; padding: 0 0 0 1.45em;
 			position: absolute; top: .25em; right: 0;
 			font-size: 1em;

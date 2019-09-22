@@ -1,7 +1,8 @@
 <template>
     <div class="editor">
         <RichTextMenubar :editor="editor" />
-        <editor-content :editor="editor"  />
+         
+        <editor-content class="editor__content" :editor="editor"  />
 
         <!-- <div class="suggestion-list" v-show="showSuggestions" ref="suggestions"> -->
       <!-- <template v-if="hasResults">
@@ -37,8 +38,8 @@ import {
   OrderedList,
  BulletList,
   ListItem,
-  TodoItem,
-  TodoList,
+  //TodoItem,
+  //TodoList,
 		Table,
 		TableHeader,
 		TableCell,
@@ -47,7 +48,7 @@ import {
    Code,
  Italic,
 //   Link,
-  Strike,
+  //Strike,
    Underline,
    History,
 } from 'tiptap-extensions'
@@ -66,25 +67,30 @@ export default {
         this.editorChange = true;
         this.$emit("input", getHTML());
       },
-      content: " <br/>     ",
+      content: "<br/>",
+    //   `<ul data-type="todo_list">
+    //         <li data-type="todo_item" data-done="true">
+    //           Buy beer
+    //         </li> `,
       extensions:  [
             new HardBreak(),
             new Heading(),
             new OrderedList(),
             new BulletList(),
             new ListItem(),
-            new TodoItem(),
-            new TodoList(),
+           // new TodoItem(),
+           // new TodoList(),
 
             new Bold(),
             new Code(),
             new Italic(),
-            new Strike(),
+          //  new Strike(),
             new Underline(),
             new History(),
+ 
             new Table({
-			    resizable: true,
-		    }),
+                resizable: true,
+                }),
             new TableHeader(),
             new TableCell(),
             new TableRow(),
@@ -199,8 +205,59 @@ methods: {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 
 @import '@/assets/sass/main.scss';
-
+// //@import "~variables";
+// ul[data-type="todo_list"] {
+//   padding-left: 0;
+// }
+// li[data-type="todo_item"] {
+//   display: flex;
+//   flex-direction: row;
+// }
+// .todo-checkbox {
+//   border: 2px solid $color-black;
+//   height: 0.9em;
+//   width: 0.9em;
+//   box-sizing: border-box;
+//   margin-right: 10px;
+//   margin-top: 0.3rem;
+//   user-select: none;
+//   -webkit-user-select: none;
+//   cursor: pointer;
+//   border-radius: 0.2em;
+//   background-color: transparent;
+//   transition: 0.4s background;
+// }
+// .todo-content {
+//   flex: 1;
+//   > p:last-of-type {
+//     margin-bottom: 0;
+//   }
+//   > ul[data-type="todo_list"] {
+//     margin: .5rem 0;
+//   }
+// }
+// li[data-done="true"] {
+//   > .todo-content {
+//     > p {
+//       text-decoration: line-through;
+//     }
+//   }
+//   > .todo-checkbox {
+//     background-color: $color-black;
+//   }
+// }
+// li[data-done="false"] {
+//   text-decoration: none;
+// }
+// .editor p.is-empty:first-child::before {
+//   content: attr(data-empty-text);
+//   float: left;
+//   color: #aaa;
+//   pointer-events: none;
+//   height: 0;
+//   font-style: italic;
+// }
 </style>

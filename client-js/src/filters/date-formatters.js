@@ -1,8 +1,10 @@
-import { distanceInWordsToNow, format } from 'date-fns';
+import { formatRelative } from 'date-fns';
 import Vue from 'vue';
 
+const baseDate = new Date();
 export const friendlyDate = Vue.filter('friendlyDate', (inputDate) => {
-    
-    const result = distanceInWordsToNow(inputDate) + " ago. \n(" + format(inputDate, "ddd, d MMM") +")";
+    const d = new Date(inputDate)
+    const result = formatRelative(d, baseDate)
+    // distanceInWordsToNow(inputDate) + " ago. \n(" + format(d, 'do MMMM') +")";
     return result;
 });

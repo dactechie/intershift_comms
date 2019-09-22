@@ -1,7 +1,7 @@
 <template>
     <v-btn
       bottom
-      color="pink"
+      color="blue lighten-2"
       dark
       fab
       fixed
@@ -12,6 +12,7 @@
 
      <v-dialog
       v-model="dialog"
+      persistent
       width="1200px"
     >
     
@@ -79,7 +80,7 @@ export default {
             'ADD_MESSAGE',
         ]),
         addMessage: function () {
-            this.message.title = this.message.title.replace(/[^\w\s]/gi, '').trim()
+            this.message.title = this.message.title.replace(/[^\w#/().$&,:\-\s]/gi, '').trim()
             if (this.message.title.length <1) {
                 alert("Must have a title")
                 return;

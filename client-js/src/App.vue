@@ -18,7 +18,9 @@
       </v-container>
     </v-content>
 
-      <AddMessage @addedMessage="showSuccess = true"/>
+      <AddMessage 
+       v-if="this.$route.path !== '/login'"
+       @addedMessage="showSuccess = true" />
 
         <v-snackbar
             v-model="showSuccess"
