@@ -12,7 +12,7 @@ import {  mapActions } from 'vuex'
 export default {
     mounted() {
         this.LOGOUT_ACTION()
-        this.$router.push('/login')
+        this.$router.push('/')
     },
     methods:{
         ...mapActions([
