@@ -7,7 +7,7 @@ if (navigator.userAgent.indexOf('PhantomJS') > -1) {
 
 export const mutations = {
   setLoggedInUser (state, user) {
-    state.user.push(user)
+    state.user = user
   },
 
 //   removeMessage (state, user) {

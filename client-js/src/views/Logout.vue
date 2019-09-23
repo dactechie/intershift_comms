@@ -10,15 +10,15 @@
 import {  mapActions } from 'vuex'
 
 export default {
-    mounted() {
-        this.LOGOUT_ACTION()
-        this.$router.push('/')
-    },
     methods:{
         ...mapActions([
             'LOGOUT_ACTION',
         ]),
-    }
+    },
+    mounted() {
+        this.LOGOUT_ACTION()
+        this.$router.push('/login')
+    },
 }
 
 </script>

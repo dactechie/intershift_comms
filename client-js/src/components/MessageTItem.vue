@@ -4,14 +4,11 @@
         v-bind:color="message.created_user.color"
         large
         >
-        <!-- <template v-slot:icon>
-            <span class="white--text sm-1">{{message.created_user.username}}</span>
-        </template> -->
         <v-avatar slot="icon">
           <img ref="avatar" 
                 :alt="message.created_user.username"/>
         </v-avatar>
-
+        <span slot="opposite"><div class="grey--text">{{message.created_user.username | properFirstname }}</div></span>
         <v-container >
         <v-card  class="mx-auto"  >
    
@@ -60,7 +57,7 @@
 import ViewMessage from './ViewMessage'
 import ReadByUserBadges from './ReadByUserBadges'
 import { friendlyDate } from '../filters/date-formatters'
-
+import { properFirstname } from '../filters/string-formatters'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -70,7 +67,7 @@ export default {
     },
     filters: {
         friendlyDate,
-    //    seenByMe,
+        properFirstname,
     },
     props : ["message"],
     
@@ -87,8 +84,10 @@ export default {
       }
     },
     mounted() {
-        this.$refs.avatar.src = require('../assets/images/avatars/' + this.message.created_user.username + '.svg')
-        this.$refs.avatar.title =  this.message.created_user.initials
+        this.$nextTick(function () {
+            this.$refs.avatar.src = require('../assets/images/avatars/' + this.message.created_user.username + '.svg')
+            this.$refs.avatar.title =  this.message.created_user.initials
+        })
     },
     methods: {
         showMessage() {

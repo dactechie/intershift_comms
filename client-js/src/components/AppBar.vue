@@ -21,8 +21,7 @@
       ></v-text-field>
       <v-spacer></v-spacer>
       
-      <a v-if="getLoggedInUser.admin" :href="admin_url">Admin       
-      </a>
+      <a v-if="getLoggedInUser.admin" :href="admin_url">Admin </a> &nbsp;
       
       <!-- <v-btn icon> -->
           <!-- <img :src="avatar_src"
@@ -63,6 +62,11 @@ export default {
     },
     mounted() {
         // {"admin":true,"color":"blue","initials":"MJ","public_id":"fc4d703b-3ff5-465f-87ae-0a2b29f5d0d1","username":"aftab.jalal"}
+        if (!this.getLoggedInUser) {
+            // reload
+            console.log("get logged in user was null,... reloading....")
+            this.$router.push('/');
+        }
         this.avatar_src = require('../assets/images/avatars/' + this.getLoggedInUser.username + '.svg')
         // this.$refs.avatar.title =  this.getLoggedInUser.initials
     },

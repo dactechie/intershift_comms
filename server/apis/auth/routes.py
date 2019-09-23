@@ -12,20 +12,12 @@ def _unableToLogin():
                          401, 
                          {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
-
-# @mod.route('/login', methods=['OPTIONS'])
-# def login_options():
-#     print(request)
-#     return 'ok'
-
-
 @mod.route('/login', methods=['POST'])
 def login():
     auth = None
     username = None
     if request.data:
         auth = json.loads(request.data.decode('utf-8'))
-        # username = auth['email']
     else:
         auth = request.authorization    # for Postman
     username = auth['username']
@@ -49,22 +41,6 @@ def login():
         return jsonify({'token': decoded_token, 'user': u})
 
     return _unableToLogin()
-
-# @mod.route('/logout')
-# @token_required
-# def logout(current_user):
-
-#     user = User.query.filter_by(username=auth.username).first()
-#     if not user:
-#         return _unableToLogin()
-
-#     if check_password_hash(user.password, auth.password):
-#         token  = jwt.encode({'public_id': user.public_id, 
-#                              'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=120),                             
-#                             }, app.config['SECRET_KEY'])
-#         return jsonify({'token': token.decode('UTF-8')})
-
-#     return _unableToLogin()
 
 
 # @mod.route('/register')

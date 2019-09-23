@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store/index'
-//import VueAuthenticate from 'vue-authenticate'
 import axios from 'axios'
 import VueAxios from 'vue-axios';
 import vuetify from './plugins/vuetify'
@@ -10,10 +9,7 @@ import {API_URL} from './constants'
 
 Vue.config.productionTip = false
 
-const baseAxios = axios.create({
-  baseURL: API_URL
-})
-
+const baseAxios = axios.create({ baseURL: API_URL });
 
 baseAxios.interceptors.response.use(function (response) {
     return response
